@@ -3,3 +3,6 @@ Release Notes for JdbcMsSql 2.0
 
 2.0.23
 First release of JdbcMsSql on GitHub.
+
+2.0.27
+.gitattributes added.
