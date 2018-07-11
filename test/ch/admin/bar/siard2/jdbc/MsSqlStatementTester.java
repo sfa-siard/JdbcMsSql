@@ -8,15 +8,16 @@ import org.junit.*;
 import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.SqlLiterals;
-import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.identifier.*;
+import com.microsoft.sqlserver.jdbc.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mssql.*;
 
 public class MsSqlStatementTester extends BaseStatementTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+"\\"+_cp.getCatalog()+":"+_cp.getPort());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
   private MsSqlStatement _stmtMsSql = null;
@@ -86,10 +87,32 @@ public class MsSqlStatementTester extends BaseStatementTester
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
   } /* setUp */
   
+  /*------------------------------------------------------------------*/
+  /** @return unwrapped MSSQL DataSource
+   */
+  private SQLServerStatement getUnwrapped()
+  {
+    SQLServerStatement ssstmt = null;
+    try { ssstmt = (SQLServerStatement)_stmtMsSql.unwrap(Statement.class); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    return ssstmt;
+  } /* getUnwrapped */
+
   @Test
   public void testClass()
   {
     assertEquals("Wrong statement class!", MsSqlStatement.class, _stmtMsSql.getClass());
+    try
+    {
+      ResultSet rs = getUnwrapped().executeQuery("SELECT DB_NAME() AS DbName");
+      if (rs.next())
+      {
+        String sDbName = rs.getString("DbName");
+        assertEquals("Wrong database name received!",_cp.getCatalog(),sDbName);
+      }
+      rs.close();
+    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testClass */
 
   @Test

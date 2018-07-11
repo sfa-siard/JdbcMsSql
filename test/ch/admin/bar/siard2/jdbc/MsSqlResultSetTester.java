@@ -25,7 +25,7 @@ public class MsSqlResultSetTester
   extends BaseResultSetTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+"\\"+_cp.getCatalog()+":"+_cp.getPort());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
   private static long _lMsTotalStart = 0;

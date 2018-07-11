@@ -12,7 +12,7 @@ import ch.admin.bar.siard2.jdbcx.*;
 public class MsSqlConnectionTester extends BaseConnectionTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+"\\"+_cp.getCatalog()+":"+_cp.getPort());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
   private static final String _sDB_CATALOG = _cp.getCatalog();
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();

@@ -30,7 +30,7 @@ public class MsSqlDriver
   /** URL prefix for SQL Server JDBC URL */
   public static final String sSQLSERVER_URL_PREFIX = sJDBC_SCHEME+":"+sSQLSERVER_SCHEME+":";
   /** URL for database name.
-   * @param sDatabaseName host\database:port, e.g. localhost\testdb:1433 
+   * @param sDatabaseName host:port;databaseName=database, e.g. localhost:1433;databaseName=testdb 
    * @return JDBC URL.
    */
   public static String getUrl(String sDatabaseName)
@@ -45,7 +45,7 @@ public class MsSqlDriver
    */
   public static void register()
   {
-    try { BaseDriver.register(new MsSqlDriver(), "com.microsoft.sqlserver.jdbc.SQLServerDriver", "jdbc:sqlserver://localhost\\testdb:1433"); }
+    try { BaseDriver.register(new MsSqlDriver(), "com.microsoft.sqlserver.jdbc.SQLServerDriver", "jdbc:sqlserver://localhost:1433:databaseName=testdb"); }
     catch(Exception e) { throw new Error(e); }
   }
 

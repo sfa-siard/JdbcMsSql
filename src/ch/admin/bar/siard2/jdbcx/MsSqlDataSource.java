@@ -159,20 +159,20 @@ public class MsSqlDataSource
   } /* getDescription */
   
   /*------------------------------------------------------------------*/
-  /** set instance name.
-   * @param name instance name.
+  /** set database name.
+   * @param name database name.
    */
-  public void setInstanceName(String name)
+  public void setDatabaseName(String name)
   {
-    getUnwrapped().setInstanceName(name);
-  } /* setInstanceName */
+    ((SQLServerDataSource)getUnwrapped()).setDatabaseName(name);
+  } /* setDatabaseName */
   
   /*------------------------------------------------------------------*/
-  /** @return instance name.
+  /** @return database name.
    */
-  public String getInstanceName()
+  public String getDatabaseName()
   {
-    return getUnwrapped().getInstanceName();
-  } /* getInstanceName */
+    return ((SQLServerDataSource)getUnwrapped()).getDatabaseName();
+  } /* getDatabaseName */
   
 } /* class MsSqlDataSource */
