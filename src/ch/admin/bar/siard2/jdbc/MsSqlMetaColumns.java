@@ -99,7 +99,9 @@ public class MsSqlMetaColumns
     Connection conn, String sCatalogName, String sSchemaName)
     throws SQLException
   {
-    _il.enter(SqlTypes.getTypeName(iType));
+    _il.enter(SqlTypes.getTypeName(iType),sTypeName);
+    if (sTypeName.startsWith("\"") && sTypeName.endsWith("\""))
+      sTypeName = sTypeName.substring(1,sTypeName.length()-1);
     if (sTypeName.equals("xml"))
       iType = Integer.valueOf(Types.SQLXML);
     else if (sTypeName.equals("datetimeoffset"))
