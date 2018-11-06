@@ -99,6 +99,7 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
         "%");
       if ((rs != null) && (!rs.isClosed()))
       {
+        int iPosition = 0;
         while (rs.next())
         {
           String sCatalogName = rs.getString("TABLE_CAT");
@@ -118,6 +119,9 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
           String sTypeName = rs.getString("TYPE_NAME");
           int iColumnSize = rs.getInt("COLUMN_SIZE");
           // int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
+          iPosition++;
+          int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
+          assertEquals("Invalid position encountered!",iPosition,iOrdinalPosition);
           switch(sTypeName)
           {
             case "CHAR": assertEquals("Invalid CHAR mapping!",Types.CHAR,iDataType); break;
