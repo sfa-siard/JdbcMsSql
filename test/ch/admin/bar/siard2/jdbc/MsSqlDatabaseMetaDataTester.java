@@ -185,14 +185,11 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
                   qiType.setSchema(sSchemaName);
                 if (qiType.equals(_qiGeometryType) ||
                   qiType.equals(_qiGeographyType))
-                {
                   assertEquals("Invalid geo type mapping!",iDataType,Types.VARCHAR);
-                  assertTrue("Invalid length of geo type mapping!",iColumnSize < 8000);
-                }
                 else if (qiType.equals(_qiHierarchyIdType))
                 {
                   assertEquals("Invalid hierarchyid type mapping!",iDataType,Types.VARCHAR);
-                  assertTrue("Invalid length of hierarchyid type mapping!",iColumnSize < 8000);
+                  assertTrue("Invalid length of hierarchyid type mapping!",iColumnSize < 4000);
                 } 
                 else
                   assertEquals("Invalid UDT mapping!",iDataType,Types.DISTINCT);

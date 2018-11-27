@@ -1078,6 +1078,7 @@ public class MsSqlResultSetTester
         }
         else if (tcd.getName().equals("CVARCHAR_64") ||
                  tcd.getName().equals("CNVARCHAR_1000") ||
+                 tcd.getName().equals("CNVARCHAR_MAX") ||
                  tcd.getName().equals("CSYSNAME"))
         {
           if (o instanceof String)
@@ -1110,7 +1111,8 @@ public class MsSqlResultSetTester
           else
             fail("Type byte[] expected for "+tcd.getType()+"!");
         }
-        else if (tcd.getName().equals("CVARBINARY_1000"))
+        else if (tcd.getName().equals("CVARBINARY_1000") ||
+                 tcd.getName().equals("CVARBINARY_MAX"))
         {
           if (o instanceof byte[])
           {

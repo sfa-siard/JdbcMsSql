@@ -152,6 +152,7 @@ See also: https://msdn.microsoft.com/en-us/library/ms187752.aspx
     /* binary */
     listCdSimple.add(new ColumnDefinition("CBINARY_255","binary(255)",TestUtils.getBytes(50)));
     listCdSimple.add(new ColumnDefinition("CVARBINARY_1000","varbinary(1000)",TestUtils.getBytes(500)));
+    listCdSimple.add(new ColumnDefinition("CVARBINARY_MAX","varbinary(max)",TestUtils.getBytes(50000)));
     listCdSimple.add(new ColumnDefinition("CIMAGE","image",TestUtils.getBytes(5000)));
     /* other */
     // synonym rowversion is preferred, is NOT an ISO TIMESTAMP!
@@ -171,6 +172,7 @@ See also: https://msdn.microsoft.com/en-us/library/ms187752.aspx
     listCdSimple.add(new ColumnDefinition("CTEXT","text",TestUtils.getString(5000)));
     listCdSimple.add(new ColumnDefinition("CNCHAR_255","nchar(255)",TestUtils.getString(50)));
     listCdSimple.add(new ColumnDefinition("CNVARCHAR_1000","nvarchar(1000)",TestUtils.getString(500)));
+    listCdSimple.add(new ColumnDefinition("CNVARCHAR_MAX","nvarchar(max)",TestUtils.getString(50000)));
     listCdSimple.add(new ColumnDefinition("CNTEXT","ntext",TestUtils.getString(5000)));
     listCdSimple.add(new ColumnDefinition("CSYSNAME","sysname",TestUtils.getNString(31)));
     // see https://msdn.microsoft.com/en-us/library/ms187339.aspx
