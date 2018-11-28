@@ -245,9 +245,9 @@ public class MsSqlDatabaseMetaData
     if (catalog != null)
       sbCondition.append(" AND DB_NAME() = "+SqlLiterals.formatStringLiteral(catalog)+"\r\n");
     if (schemaPattern != null)
-      sbCondition.append(" AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+"\r\n");
+      sbCondition.append(" AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+this.getSearchStringEscape()+"'\r\n");
     if (tableNamePattern != null)
-      sbCondition.append(" AND o.name LIKE "+SqlLiterals.formatStringLiteral(tableNamePattern)+"\r\n");
+      sbCondition.append(" AND o.name LIKE "+SqlLiterals.formatStringLiteral(tableNamePattern)+" ESCAPE '"+this.getSearchStringEscape()+"'\r\n");
     StringBuilder sbCaseTableType = new StringBuilder("  case o.type\r\n");
     sbCaseTableType.append("    when 'U' then 'TABLE'\r\n");
     sbCaseTableType.append("    when 'V' then 'VIEW'\r\n");
@@ -325,9 +325,9 @@ public class MsSqlDatabaseMetaData
     if (catalog != null)
       sbCondition.append("AND DB_NAME() = "+SqlLiterals.formatStringLiteral(catalog)+"\r\n");
     if (schemaPattern != null)
-      sbCondition.append("AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+"\r\n");
+      sbCondition.append("AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+this.getSearchStringEscape()+"\r\n");
     if (typeNamePattern != null)
-      sbCondition.append("AND t.name LIKE "+SqlLiterals.formatStringLiteral(typeNamePattern)+"\r\n");
+      sbCondition.append("AND t.name LIKE "+SqlLiterals.formatStringLiteral(typeNamePattern)+" ESCAPE '"+this.getSearchStringEscape()+"\r\n");
     if (types != null)
     {
       StringBuilder sbTypesSet = new StringBuilder();
@@ -491,7 +491,7 @@ public class MsSqlDatabaseMetaData
     if (parentTable != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("TCPK.TABLE_NAME LIKE "+SqlLiterals.formatStringLiteral(parentTable));
+      sbCondition.append("TCPK.TABLE_NAME = "+SqlLiterals.formatStringLiteral(parentTable));
     }
     if (foreignCatalog != null)
     {
@@ -506,7 +506,7 @@ public class MsSqlDatabaseMetaData
     if (foreignTable != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("TCFK.TABLE_NAME LIKE "+SqlLiterals.formatStringLiteral(foreignTable));
+      sbCondition.append("TCFK.TABLE_NAME = "+SqlLiterals.formatStringLiteral(foreignTable));
     }
     if (sbCondition.length() > 0)
       sSql = sSql + "WHERE "+sbCondition+"\r\n"+
