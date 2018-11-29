@@ -79,11 +79,11 @@ public class MsSqlStatement
       ResultSet rs = null;
       try
       {
-        rs = bdmd.getCrossReference(
+        rs = bdmd.getExportedKeys(
           qiTable.getCatalog(), 
-          bdmd.toPattern(qiTable.getSchema()), 
-          bdmd.toPattern(qiTable.getName()), 
-          null,null,"%");
+          qiTable.getSchema(), 
+          qiTable.getName() 
+          );
         while (rs.next())
         {
           QualifiedId qiFkTable = new QualifiedId(

@@ -88,7 +88,7 @@ public class MsSqlSqlFactory
             null);
           while(rsUdts.next())
             iDataType = rsUdts.getInt("DATA_TYPE");
-          rsUdts.close();
+          rsUdts.close(); 
         }
         catch(ParseException pe) {}
         Map<QualifiedId, Integer> mapTableType = _mapColumnType.get(sColumnName);

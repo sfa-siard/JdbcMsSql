@@ -245,9 +245,9 @@ public class MsSqlDatabaseMetaData
     if (catalog != null)
       sbCondition.append(" AND DB_NAME() = "+SqlLiterals.formatStringLiteral(catalog)+"\r\n");
     if (schemaPattern != null)
-      sbCondition.append(" AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+this.getSearchStringEscape()+"'\r\n");
+      sbCondition.append(" AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+getSearchStringEscape()+"'\r\n");
     if (tableNamePattern != null)
-      sbCondition.append(" AND o.name LIKE "+SqlLiterals.formatStringLiteral(tableNamePattern)+" ESCAPE '"+this.getSearchStringEscape()+"'\r\n");
+      sbCondition.append(" AND o.name LIKE "+SqlLiterals.formatStringLiteral(tableNamePattern)+" ESCAPE '"+getSearchStringEscape()+"'\r\n");
     StringBuilder sbCaseTableType = new StringBuilder("  case o.type\r\n");
     sbCaseTableType.append("    when 'U' then 'TABLE'\r\n");
     sbCaseTableType.append("    when 'V' then 'VIEW'\r\n");
@@ -325,9 +325,9 @@ public class MsSqlDatabaseMetaData
     if (catalog != null)
       sbCondition.append("AND DB_NAME() = "+SqlLiterals.formatStringLiteral(catalog)+"\r\n");
     if (schemaPattern != null)
-      sbCondition.append("AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+this.getSearchStringEscape()+"\r\n");
+      sbCondition.append("AND s.name LIKE "+SqlLiterals.formatStringLiteral(schemaPattern)+" ESCAPE '"+getSearchStringEscape()+"'\r\n");
     if (typeNamePattern != null)
-      sbCondition.append("AND t.name LIKE "+SqlLiterals.formatStringLiteral(typeNamePattern)+" ESCAPE '"+this.getSearchStringEscape()+"\r\n");
+      sbCondition.append("AND t.name LIKE "+SqlLiterals.formatStringLiteral(typeNamePattern)+" ESCAPE '"+getSearchStringEscape()+"'\r\n");
     if (types != null)
     {
       StringBuilder sbTypesSet = new StringBuilder();

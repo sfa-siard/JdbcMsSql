@@ -169,7 +169,7 @@ public class MsSqlConnectionTester extends BaseConnectionTester
   public void testPrepareStatement_String_AString()
   {
     enter();
-    try { _connMsSql.prepareStatement("SELECT CINTEGER, ? FROM "+TestSqlDatabase.getQualifiedSimpleTable(),new String[]{"CCHAR_5"}); }
+    try { _connMsSql.prepareStatement(_sSQL,new String[]{"COL_A"}); }
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testPrepareStatement_String_AString */
