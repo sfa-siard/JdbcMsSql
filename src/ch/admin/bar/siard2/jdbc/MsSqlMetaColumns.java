@@ -148,6 +148,7 @@ public class MsSqlMetaColumns
         (iDataType == Types.NCLOB) ||
         (iDataType == Types.SQLXML))
       lColumnSize = -1;
+    /*** these type are not limited in size any more because of (max) declaration!
     else if (iDataType == Types.VARBINARY)
     {
       int iMaxLength = 8000;
@@ -160,6 +161,13 @@ public class MsSqlMetaColumns
       if (lColumnSize > iMaxLength)
         lColumnSize = iMaxLength;
     }
+    else if (iDataType == Types.NVARCHAR)
+    {
+      int iMaxLength = 4000;
+      if (lColumnSize > iMaxLength)
+        lColumnSize = iMaxLength;
+    }
+    ***/
     return lColumnSize;
   } /* getColumnSize */
   
