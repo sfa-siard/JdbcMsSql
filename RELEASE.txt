@@ -2,7 +2,7 @@ Release Notes for JdbcMsSql 2.1
 ===============================
 
 2.1.??
-View definition added.
+Corrected handling of QUERY_TEXT in getTables
 
 2.1.0
 Release for JAVA 10
