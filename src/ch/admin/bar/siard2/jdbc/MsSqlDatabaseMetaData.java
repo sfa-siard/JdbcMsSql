@@ -266,7 +266,7 @@ public class MsSqlDatabaseMetaData
     sbSql.append("  NULL AS TYPE_NAME,\r\n");
     sbSql.append("  NULL AS SELF_REFERENCING_COL_NAME,\r\n");
     sbSql.append("  NULL AS REF_GENERATION,\r\n");
-    sbSql.append("  m.definition as QUERY_TEXT\r\n");
+    sbSql.append("  m.definition as "+_QUERY_TEXT+"\r\n");
     sbSql.append("FROM sys.all_objects o\r\n");
     sbSql.append("  JOIN sys.schemas s\r\n");
     sbSql.append("    ON (o.schema_id = s.schema_id)\r\n");
