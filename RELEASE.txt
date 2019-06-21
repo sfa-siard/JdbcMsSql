@@ -1,6 +1,9 @@
 Release Notes for JdbcMsSql 2.1
 ===============================
 
+2.1.??
+View definition added.
+
 2.1.0
 Release for JAVA 10
 
