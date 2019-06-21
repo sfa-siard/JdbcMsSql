@@ -509,6 +509,13 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
   }
   
   @Test
+  public void testGetViews()
+  {
+    enter();
+    try { print(_dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"VIEW"})); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  }
+  @Test
   @Override
   public void testGetUDTs()
   {
