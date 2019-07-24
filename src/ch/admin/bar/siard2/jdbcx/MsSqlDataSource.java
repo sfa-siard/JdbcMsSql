@@ -11,7 +11,6 @@ Created    : 01.06.2016, Hartwig Thomas
 package ch.admin.bar.siard2.jdbcx;
 
 import java.sql.*;
-
 import javax.sql.*;
 import com.microsoft.sqlserver.jdbc.*;
 import ch.enterag.utils.jdbcx.*;
@@ -58,7 +57,7 @@ public class MsSqlDataSource
   
   /*------------------------------------------------------------------*/
   /** {@inheritDoc}
-   * returns the appropriately wrapped H2 Connection.
+   * returns the appropriately wrapped MSSQL Connection.
    */
   @Override
   public Connection getConnection() throws SQLException
@@ -68,7 +67,7 @@ public class MsSqlDataSource
 
   /*------------------------------------------------------------------*/
   /** {@inheritDoc}
-   * returns the appropriately wrapped H2 Connection.
+   * returns the appropriately wrapped MSSQL Connection.
    */
   @Override
   public Connection getConnection(String username, String password)
