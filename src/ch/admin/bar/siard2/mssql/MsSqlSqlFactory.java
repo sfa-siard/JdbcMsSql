@@ -191,7 +191,7 @@ public class MsSqlSqlFactory
   public DataType newDataType()
   {
     return new MsSqlDataType(this);
-  } /* newPredefinedType */
+  } /* newDataType */
   
   @Override 
   public PredefinedType newPredefinedType()

@@ -61,14 +61,14 @@ public class MsSqlDriver
   public boolean acceptsURL(String url) throws SQLException
   {
     _il.enter(url);
-    boolean bAccepts = url.startsWith("jdbc:sqlserver:");
+    boolean bAccepts = url.startsWith(sSQLSERVER_URL_PREFIX);
     _il.exit(bAccepts);
     return bAccepts;
   } /* acceptsUrl */
   
   /*------------------------------------------------------------------*/
   /** {@inheritDoc}
-   * returns the appropriately wrapped H2 Connection.
+   * returns the appropriately wrapped MSSQL Connection.
    */
   @Override
   public Connection connect(String url, Properties info)
