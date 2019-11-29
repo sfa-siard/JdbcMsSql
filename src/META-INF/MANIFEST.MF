@@ -4,9 +4,9 @@ Specification-Title: JDBC
 Specification-Version: 4
 Specification-Vendor: Enter AG, Rüti ZH, Switzerland
 Implementation-Title: Microsoft SQL Server JDBC Wrapper
-Implementation-Version: 2.1.50
+Implementation-Version: 2.1.51
 Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
-Built-Date: 12. Nov 2019
+Built-Date: 29. Nov 2019
 Class-Path: sqljdbc41.jar
   jdbcbase.jar
   sqlparser.jar
