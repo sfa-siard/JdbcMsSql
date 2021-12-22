@@ -16,7 +16,7 @@ docker-compose up -d
 Run all tests
 
 ```shell
-ant tests
+ant test
 ```
 
 Build the project
