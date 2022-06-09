@@ -275,4 +275,9 @@ public class MsSqlConnection
     return ps;
   } /* prepareStatement */
 
+  @Override
+  public Blob createDatalinkObject() throws SQLException {
+    return createBlob();
+  }
+
 } /* class MsSqlConnection */

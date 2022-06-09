@@ -52,6 +52,7 @@ public class MsSqlPredefinedType
     mapISO_TO_MSSQL.put(PreType.TIME,"time");
     mapISO_TO_MSSQL.put(PreType.TIMESTAMP,"datetime2");
     mapISO_TO_MSSQL.put(PreType.INTERVAL,"nvarchar");
+    mapISO_TO_MSSQL.put(PreType.DATALINK, "image");
   }
   private static int iMAX_BYTE_LENGTH = 8000;
 

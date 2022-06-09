@@ -175,6 +175,7 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
             case "datetime2": assertEquals("Invalid datetime2 mapping!",Types.TIMESTAMP,iDataType); break;
             case "datetimeoffset": assertEquals("Invalid datetimeoffset mapping!",Types.VARCHAR,iDataType); break;
             case "sql_variant": assertEquals("Invalid sql_variant mapping!",Types.VARBINARY,iDataType); break;
+            case "DATALINK": assertEquals("Invalid DATALINK mapping!", Types.DATALINK, iDataType); break;
             default: 
               try
               {

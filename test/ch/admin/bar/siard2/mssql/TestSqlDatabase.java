@@ -24,6 +24,7 @@ public class TestSqlDatabase
 {
   public static final String _sTEST_SCHEMA = "TESTSQLSCHEMA";
   private static final String _sTEST_TABLE_SIMPLE = "TSQLSIMPLE";
+  public static final String COLUMN_DATALINK = "COLUMN_DATALINK";
   public static QualifiedId getQualifiedSimpleTable() { return new QualifiedId(null,_sTEST_SCHEMA,_sTEST_TABLE_SIMPLE); }
   private static final String _sTEST_TABLE_COMPLEX = "TSQLCOMPLEX";
   public static QualifiedId getQualifiedComplexTable() { return new QualifiedId(null,_sTEST_SCHEMA,_sTEST_TABLE_COMPLEX); }
@@ -41,6 +42,11 @@ public class TestSqlDatabase
   public static List<TestColumnDefinition> _listBaseDistinct = getListBaseDistinct();
   
   private static int _iPrimarySimple = -1;
+
+  public static String getCircleJpgUrl() {
+    return "file://localhost" + new File("testfiles/circle.jpg").getAbsolutePath();
+  }
+
   @SuppressWarnings("deprecation")
   private static List<TestColumnDefinition> getListCdSimple()
   {
@@ -70,6 +76,7 @@ public class TestSqlDatabase
     listCdSimple.add(new TestColumnDefinition("CTIMESTAMP","TIMESTAMP(9)",new Timestamp(2016-1900,11,28,13,45,28,123456789)));
     listCdSimple.add(new TestColumnDefinition("CINTERVAL_YEAR_3_MONTH","INTERVAL YEAR(2) TO MONTH",new Interval(1,123,3)));
     listCdSimple.add(new TestColumnDefinition("CINTERVAL_DAY_2_SECONDS_6","INTERVAL DAY(2) TO SECOND(6)",new Interval(1,4,17,54,23,123456000l)));
+    listCdSimple.add(new TestColumnDefinition(COLUMN_DATALINK,"DATALINK", getCircleJpgUrl()));
     return listCdSimple;
   }
   public static List<TestColumnDefinition> _listCdSimple = getListCdSimple();
