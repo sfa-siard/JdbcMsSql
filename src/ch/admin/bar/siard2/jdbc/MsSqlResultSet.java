@@ -844,6 +844,9 @@ public class MsSqlResultSet
   /** {@inheritDoc} */
   @Override
   public void updateObject(int columnIndex, Object x) throws SQLException {
+    if (x instanceof URL) {
+      updateURL(columnIndex, (URL) x);
+    }
     if (x instanceof NClob)
       updateNClob(columnIndex, (NClob) x);
     else if (x instanceof Clob)
