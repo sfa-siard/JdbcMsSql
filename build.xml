@@ -179,6 +179,7 @@ Created    : 09.05.2016, Hartwig Thomas
       </fileset>
     </jar>
   </target>
+
   <!-- create the JAR file containing all classes -->
   <property name="jarfile" value="${ant.project.name}.jar"/>
   <target name="jar" depends="jar-with-tests">
