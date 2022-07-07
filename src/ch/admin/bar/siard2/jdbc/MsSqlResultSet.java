@@ -430,22 +430,25 @@ public class MsSqlResultSet
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
-  public Object getObject(int columnIndex) throws SQLException
-  {
+  public Object getObject(int columnIndex) throws SQLException {
     Object o = super.getObject(columnIndex);
     int iType = getMetaData().getColumnType(columnIndex);
-    if (iType == Types.CLOB)
-      o = super.getClob(columnIndex);
-    else if (iType == Types.NCLOB)
-      o = super.getNClob(columnIndex);
-    else if (iType == Types.BLOB)
-      o = super.getBlob(columnIndex);
-    else if (iType == Types.SQLXML)
-      o = super.getSQLXML(columnIndex);
-    else
-      o = mapObject(o,iType);
-    return mapObject(o,iType);
-  } /* getObject */
+    if (iType == Types.DATALINK) {
+      o = getURL(columnIndex);
+    }
+    if (iType == Types.CLOB) {
+      o = getClob(columnIndex);
+    } else if (iType == Types.NCLOB) {
+      o = getNClob(columnIndex);
+    } else if (iType == Types.BLOB) {
+      o = getBlob(columnIndex);
+    } else if (iType == Types.SQLXML) {
+      o = getSQLXML(columnIndex);
+    } else {
+      o = mapObject(o, iType);
+    }
+    return mapObject(o, iType);
+  }
 
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
@@ -521,13 +524,23 @@ public class MsSqlResultSet
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
-  public URL getURL(int columnIndex) throws SQLException
-  {
-    URL url = null;
-    try { url = super.getURL(columnIndex); }
-    catch(SQLServerException sse) { throwNotSupportedException(sse); }
+  public URL getURL(int columnIndex) throws SQLException {
+    try {
+      return new URL(super.getString(columnIndex));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public URL updateURL(int columnIndex, URL url) throws SQLException {
+    super.updateObject(columnIndex, url.getPath());
     return url;
-  } /* getURL */
+  }
+
+  public URL updateURL(String columnLabel, URL url) throws SQLException {
+    updateURL(this.findColumn(columnLabel), url);
+    return url;
+  }
 
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
@@ -830,26 +843,25 @@ public class MsSqlResultSet
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
-  public void updateObject(int columnIndex, Object x)
-    throws SQLException
-  {
-    if (x instanceof NClob)
-      super.updateNClob(columnIndex,(NClob)x);
-    else if (x instanceof Clob)
-      super.updateClob(columnIndex, (Clob)x);
-    else if (x instanceof Blob)
-      super.updateBlob(columnIndex,(Blob)x);
-    else if (x instanceof SQLXML)
-      super.updateSQLXML(columnIndex,(SQLXML)x);
-    else if (x instanceof Duration)
-    {
-      Duration duration = (Duration)x;
-      Interval iv = Interval.fromDuration(duration);
-      super.updateString(columnIndex, SqlLiterals.formatIntervalLiteral(iv));
+  public void updateObject(int columnIndex, Object x) throws SQLException {
+    if (x instanceof URL) {
+      updateURL(columnIndex, (URL) x);
     }
-    else
+    if (x instanceof NClob)
+      updateNClob(columnIndex, (NClob) x);
+    else if (x instanceof Clob)
+      updateClob(columnIndex, (Clob) x);
+    else if (x instanceof Blob)
+      updateBlob(columnIndex, (Blob) x);
+    else if (x instanceof SQLXML)
+      updateSQLXML(columnIndex, (SQLXML) x);
+    else if (x instanceof Duration) {
+      Duration duration = (Duration) x;
+      Interval iv = Interval.fromDuration(duration);
+      updateString(columnIndex, SqlLiterals.formatIntervalLiteral(iv));
+    } else
       super.updateObject(columnIndex, x);
-  } /* updateObject */
+  }
 
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */

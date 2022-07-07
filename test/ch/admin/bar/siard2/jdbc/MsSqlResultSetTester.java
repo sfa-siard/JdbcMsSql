@@ -2,6 +2,8 @@ package ch.admin.bar.siard2.jdbc;
 
 import java.io.*;
 import java.math.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
 import java.text.*;
@@ -82,6 +84,7 @@ public class MsSqlResultSetTester
     listCdSimple.add(new TestColumnDefinition("CTIMESTAMP","TIMESTAMP(9)",new Timestamp(2016-1900,12,2,14,24,12,987654321)));
     listCdSimple.add(new TestColumnDefinition("CINTERVAL_YEAR_3_MONTH","INTERVAL YEAR(2) TO MONTH",new Interval(1,3,6)));
     listCdSimple.add(new TestColumnDefinition("CINTERVAL_DAY_2_SECONDS_6","INTERVAL DAY(2) TO SECOND(6)",new Interval(1,0,17,54,23,123456000l)));
+    listCdSimple.add(new TestColumnDefinition(TestSqlDatabase.COLUMN_DATALINK,"DATALINK", TestSqlDatabase.getCircleJpgUrl()));
     return listCdSimple;
   }
   public static List<TestColumnDefinition> _listCdSimple = getListCdSimple();
@@ -94,29 +97,25 @@ public class MsSqlResultSetTester
     return listCdComplex;
   }
   public static List<TestColumnDefinition> _listCdComplex = getListCdComplex();
-  
+
   @BeforeClass
-  public static void setUpClass()
-  {
-    if (_lMsTotalStart == 0)
-      _lMsTotalStart = System.currentTimeMillis(); 
-    try 
-    { 
-      MsSqlDataSource dsMsSql = new MsSqlDataSource();
-      dsMsSql.setUrl(_sDB_URL);
-      dsMsSql.setUser(_sDB_USER);
-      dsMsSql.setPassword(_sDB_PASSWORD);
-      MsSqlConnection connMsSql = (MsSqlConnection)dsMsSql.getConnection();
-      connMsSql.setAutoCommit(false);
-      /* drop and create the test databases */
-      long lMsTestDatabaseStart = System.currentTimeMillis();
-      new TestMsSqlDatabase(connMsSql);
-      new TestSqlDatabase(connMsSql);
-      _lMsTestDatabase = _lMsTestDatabase + System.currentTimeMillis() - lMsTestDatabaseStart;
-      connMsSql.close();
+  public static void setUpClass() throws SQLException {
+    if (_lMsTotalStart == 0) {
+      _lMsTotalStart = System.currentTimeMillis();
     }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
-  } /* setUpClass */
+    MsSqlDataSource dsMsSql = new MsSqlDataSource();
+    dsMsSql.setUrl(_sDB_URL);
+    dsMsSql.setUser(_sDB_USER);
+    dsMsSql.setPassword(_sDB_PASSWORD);
+    MsSqlConnection connMsSql = (MsSqlConnection) dsMsSql.getConnection();
+    connMsSql.setAutoCommit(false);
+    /* drop and create the test databases */
+    long lMsTestDatabaseStart = System.currentTimeMillis();
+    new TestMsSqlDatabase(connMsSql);
+    new TestSqlDatabase(connMsSql);
+    _lMsTestDatabase = _lMsTestDatabase + System.currentTimeMillis() - lMsTestDatabaseStart;
+    connMsSql.close();
+  }
   
   @AfterClass
   public static void tearDownClass()
@@ -744,12 +743,39 @@ public class MsSqlResultSetTester
   public void testGetRowId()
   {
   } /* testGetRowId */
-  
+
   @Override
   @Test
-  public void testGetUrl()
-  {
-  } /* testGetUrl */
+  public void testGetUrl() throws MalformedURLException, SQLException {
+//    enter();
+//
+//    // given
+//    openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+//    TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, TestSqlDatabase.COLUMN_DATALINK);
+//
+//    // when
+//    MsSqlResultSet rs = (MsSqlResultSet) getResultSet();
+//    URL url = rs.getURL(tcd.getName());
+//
+//    // then
+//    assertEquals(new URL((String) tcd.getValue()), url);
+  }
+
+  @Test
+  public void testUpdateUrl() throws MalformedURLException, SQLException {
+//    enter();
+//
+//    // given
+//    openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+//    TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, TestSqlDatabase.COLUMN_DATALINK);
+//
+//    // when
+//    MsSqlResultSet rs = (MsSqlResultSet) getResultSet();
+//    URL url = rs.updateURL(tcd.getName(), new URL((String) tcd.getValue()));
+//
+//    // then
+//    assertEquals(new URL((String) tcd.getValue()), url);
+  }
   
   @Override
   @Test
@@ -799,222 +825,151 @@ public class MsSqlResultSetTester
     catch(SQLFeatureNotSupportedException snse) { System.out.println(EU.getExceptionMessage(snse)); }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testGetObject_Map */
-  
+
   @Test
-  public void testGetObjectSqlSimple()
-  {
-    try
-    {
-      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-      for (int iColumn = 0; iColumn < TestSqlDatabase._listCdSimple.size(); iColumn++)
-      {
+  public void testGetObjectSqlSimple() {
+    try {
+      openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+      for (int iColumn = 0; iColumn < TestSqlDatabase._listCdSimple.size(); iColumn++) {
         TestColumnDefinition tcd = TestSqlDatabase._listCdSimple.get(iColumn);
         Object o = getResultSet().getObject(tcd.getName());
         if (tcd.getName().equals("CCHAR_5") ||
-            tcd.getName().equals("CNCHAR_5"))
-        {
-          if (o instanceof String)
-          {
-            String s = (String)o;
-            s = s.substring(0,((String)tcd.getValue()).length());
-            assertEquals("Invalid value for "+tcd.getType()+"!",tcd.getValue(),s);
-          }
-          else
-            fail("Type String expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CVARCHAR_255") ||
-          tcd.getName().equals("CNVARCHAR_127"))
-        {
-          if (o instanceof String)
-          {
-            String s = (String)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",tcd.getValue(),s);
-          }
-          else
-            fail("Type String expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CCLOB_2M") ||
-          tcd.getName().equals("CNCLOB_1M"))
-        {
-          if (o instanceof Clob)
-          {
-            Clob clob = (Clob)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",tcd.getValue(),clob.getSubString(1l,(int)clob.length()));
-          }
-          else
-            fail("Type Clob expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CXML"))
-        {
-          if (o instanceof SQLXML)
-          {
-            SQLXML sqlxml = (SQLXML)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(String)tcd.getValue(),sqlxml.getString());
-          }
-          else
-            fail("Type SQLXML expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CBINARY_5"))
-        {
-          if (o instanceof byte[])
-          {
-            byte[] buf = (byte[])o;
-            buf = Arrays.copyOf(buf, ((byte[])tcd.getValue()).length);
-            assertTrue("Invalid value for "+tcd.getType()+"!",Arrays.equals((byte[])tcd.getValue(), buf));
-          }
-          else
-            fail("Type byte[] expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CVARBINARY_255"))
-        {
-          if (o instanceof byte[])
-          {
-            byte[] buf = (byte[])o;
-            assertTrue("Invalid value for "+tcd.getType()+"!",Arrays.equals((byte[])tcd.getValue(), buf));
-          }
-          else
-            fail("Type byte[] expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CBLOB"))
-        {
-          if ( o instanceof Blob)
-          {
-            Blob blob = (Blob)o;
-            assertTrue("Invalid value for "+tcd.getType()+"!",Arrays.equals((byte[])tcd.getValue(),blob.getBytes(1l,(int)blob.length())));
-          }
-          else
-            fail("Type Blob expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CDECIMAL_15_5") ||
-          tcd.getName().equals("CNUMERIC_31"))
-        {
-          if (o instanceof BigDecimal)
-          {
-            BigDecimal bd = (BigDecimal)o;
+                tcd.getName().equals("CNCHAR_5")) {
+          if (o instanceof String) {
+            String s = (String) o;
+            s = s.substring(0, ((String) tcd.getValue()).length());
+            assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+          } else
+            fail("Type String expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CVARCHAR_255") ||
+                tcd.getName().equals("CNVARCHAR_127")) {
+          if (o instanceof String) {
+            String s = (String) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+          } else
+            fail("Type String expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CCLOB_2M") ||
+                tcd.getName().equals("CNCLOB_1M")) {
+          if (o instanceof Clob) {
+            Clob clob = (Clob) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+          } else
+            fail("Type Clob expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CXML")) {
+          if (o instanceof SQLXML) {
+            SQLXML sqlxml = (SQLXML) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), sqlxml.getString());
+          } else
+            fail("Type SQLXML expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CBINARY_5")) {
+          if (o instanceof byte[]) {
+            byte[] buf = (byte[]) o;
+            buf = Arrays.copyOf(buf, ((byte[]) tcd.getValue()).length);
+            assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+          } else
+            fail("Type byte[] expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CVARBINARY_255")) {
+          if (o instanceof byte[]) {
+            byte[] buf = (byte[]) o;
+            assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+          } else
+            fail("Type byte[] expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CBLOB")) {
+          if (o instanceof Blob) {
+            Blob blob = (Blob) o;
+            assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+          } else
+            fail("Type Blob expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CDECIMAL_15_5") ||
+                tcd.getName().equals("CNUMERIC_31")) {
+          if (o instanceof BigDecimal) {
+            BigDecimal bd = (BigDecimal) o;
             Object oExpected = tcd.getValue();
-            if (oExpected instanceof BigDecimal)
-            {
-              BigDecimal bdExpected = (BigDecimal)o;
-              assertEquals("Invalid value for "+tcd.getType()+"!",bdExpected,bd);
-            }
-            else if (oExpected instanceof BigInteger)
-            {
-              BigInteger biExpected = (BigInteger)oExpected;
+            if (oExpected instanceof BigDecimal) {
+              BigDecimal bdExpected = (BigDecimal) o;
+              assertEquals("Invalid value for " + tcd.getType() + "!", bdExpected, bd);
+            } else if (oExpected instanceof BigInteger) {
+              BigInteger biExpected = (BigInteger) oExpected;
               BigInteger bi = bd.toBigInteger();
-              assertEquals("Invalid value for "+tcd.getType()+"!",biExpected,bi);
+              assertEquals("Invalid value for " + tcd.getType() + "!", biExpected, bi);
             }
+          } else
+            fail("Type BigDecimal expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CSMALLINT")) {
+          if (o instanceof Short) {
+            Short sh = (Short) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Short) tcd.getValue(), sh);
+          } else
+            fail("Type Short expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CINTEGER")) {
+          if (o instanceof Integer) {
+            Integer i = (Integer) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), i);
+          } else
+            fail("Type Integer expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CBIGINT")) {
+          if (o instanceof Long) {
+            Long l = (Long) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Long) tcd.getValue(), l);
+          } else
+            fail("Type Long expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CREAL") ||
+                tcd.getName().equals("CFLOAT_10")) {
+          if (o instanceof Float) {
+            Float f = (Float) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Float) tcd.getValue(), f);
+          } else
+            fail("Type Float expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CDOUBLE")) {
+          if (o instanceof Double) {
+            Double d = (Double) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Double) tcd.getValue(), d);
+          } else
+            fail("Type Double expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CBOOLEAN")) {
+          if (o instanceof Short) {
+            Short sh = (Short) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Boolean) tcd.getValue(), Boolean.valueOf(sh != 0));
           }
-          else
-            fail("Type BigDecimal expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CSMALLINT"))
-        {
-          if (o instanceof Short)
-          {
-            Short sh = (Short)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Short)tcd.getValue(),sh);
-          }
-          else
-            fail("Type Short expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CINTEGER"))
-        {
-          if (o instanceof Integer)
-          {
-            Integer i = (Integer)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Integer)tcd.getValue(),i);
-          }
-          else
-            fail("Type Integer expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CBIGINT"))
-        {
-          if (o instanceof Long)
-          {
-            Long l = (Long)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Long)tcd.getValue(),l);
-          }
-          else
-            fail("Type Long expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CREAL") ||
-                 tcd.getName().equals("CFLOAT_10"))
-        {
-          if (o instanceof Float)
-          {
-            Float f = (Float)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Float)tcd.getValue(),f);
-          }
-          else
-            fail("Type Float expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CDOUBLE"))
-        {
-          if (o instanceof Double)
-          {
-            Double d = (Double)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Double)tcd.getValue(),d);
-          }
-          else
-            fail("Type Double expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CBOOLEAN"))
-        {
-          if (o instanceof Short)
-          {
-            Short sh = (Short)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Boolean)tcd.getValue(),Boolean.valueOf(sh != 0));
-          }
-        }
-        else if (tcd.getName().equals("CDATE"))
-        {
-          if (o instanceof Date)
-          {
-            Date date = (Date)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Date)tcd.getValue(),date);
-          }
-          else
-            fail("Type Date expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CTIME"))
-        {
-          if (o instanceof Time)
-          {
-            Time time = (Time)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Time)tcd.getValue(),time);
-          }
-          else
-            fail("Type Time expected for "+tcd.getType()+"!");
-        }
-        else if (tcd.getName().equals("CTIMESTAMP"))
-        {
-          if (o instanceof Timestamp)
-          {
-            Timestamp ts = (Timestamp)o;
-            Timestamp tsExpected = (Timestamp)tcd.getValue();
+        } else if (tcd.getName().equals("CDATE")) {
+          if (o instanceof Date) {
+            Date date = (Date) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Date) tcd.getValue(), date);
+          } else
+            fail("Type Date expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CTIME")) {
+          if (o instanceof Time) {
+            Time time = (Time) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Time) tcd.getValue(), time);
+          } else
+            fail("Type Time expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CTIMESTAMP")) {
+          if (o instanceof Timestamp) {
+            Timestamp ts = (Timestamp) o;
+            Timestamp tsExpected = (Timestamp) tcd.getValue();
             /* only 7 significant decimals */
-            tsExpected.setNanos(100*((tsExpected.getNanos()+49)/100));
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Timestamp)tcd.getValue(),ts);
+            tsExpected.setNanos(100 * ((tsExpected.getNanos() + 49) / 100));
+            assertEquals("Invalid value for " + tcd.getType() + "!", (Timestamp) tcd.getValue(), ts);
+          } else
+            fail("Type Timestamp expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals("CINTERVAL_YEAR_3_MONTH") ||
+                tcd.getName().equals("CINTERVAL_DAY_2_SECONDS_6")) {
+          if (o instanceof String) {
+            String s = (String) o;
+            assertEquals("Invalid value for " + tcd.getType() + "!", SqlLiterals.formatIntervalLiteral((Interval) tcd.getValue()), s);
+          } else
+            fail("Type String expected for " + tcd.getType() + "!");
+        } else if (tcd.getName().equals(TestSqlDatabase.COLUMN_DATALINK)) {
+          if (!(o instanceof Blob)) {
+            fail("Type Blob expected for " + tcd.getType() + "!");
           }
-          else
-            fail("Type Timestamp expected for "+tcd.getType()+"!");
+        } else {
+          fail("Unexpected column: " + tcd.getName() + "!");
         }
-        else if (tcd.getName().equals("CINTERVAL_YEAR_3_MONTH") ||
-                 tcd.getName().equals("CINTERVAL_DAY_2_SECONDS_6"))
-        {
-          if (o instanceof String)
-          {
-            String s = (String)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",SqlLiterals.formatIntervalLiteral((Interval)tcd.getValue()),s);
-          }
-          else
-            fail("Type String expected for "+tcd.getType()+"!");
-        }
-        else
-          fail("Unexpected column: "+tcd.getName()+"!");
       }
+    } catch (SQLException se) {
+      fail(EU.getExceptionMessage(se));
     }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testGetObjectSqlSimple */
 
   @Test
