@@ -208,6 +208,7 @@ Created    : 09.05.2016, Hartwig Thomas
       target="${target}"
       encoding="UTF-8"
       srcdir="${dirtest}"
+      excludes="**/ch/admin/bar/siard2/issues/**"
       destdir="${dirbuildtests}">
       <classpath>
         <pathelement path="${dirdist}/${jarfile}"/>
