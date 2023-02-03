@@ -11,6 +11,8 @@ plugins {
     `java-library`
 }
 
+version="2.2.2"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
