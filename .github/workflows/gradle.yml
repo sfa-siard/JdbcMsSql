@@ -27,3 +27,8 @@ jobs:
           cli-args: "up -d"
       - name: Build with Gradle
         run: ./gradlew clean build
+      - name: Upload library jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: jdbcmssql.jar
+          path: build/libs/jdbcmssql-*.jar
