@@ -20,5 +20,10 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      - name: Start test database
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          # https://docs.docker.com/compose/reference/overview/
+          cli-args: "up -d"
       - name: Build with Gradle
         run: ./gradlew clean build
