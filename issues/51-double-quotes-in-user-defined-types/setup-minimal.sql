@@ -1,0 +1,32 @@
+CREATE DATABASE siard1;
+GO
+
+USE [siard1]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+
+CREATE TYPE [dbo].[dtDay2] FROM [tinyint] NOT NULL
+    GO
+
+CREATE TABLE [dbo].[CollectionEvent](
+    [CollectionEventID] [int] IDENTITY(1,1) NOT NULL,
+    [CollectionDay] [dbo].[dtDay2] NULL,
+    [RowGUID] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+    CONSTRAINT [PK_CollectionEvent] PRIMARY KEY CLUSTERED
+(
+[CollectionEventID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+    ) ON [PRIMARY]
+
+    GO
+
+    SET ANSI_PADDING OFF
+    GO
+
