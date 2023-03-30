@@ -19,9 +19,12 @@ repositories {
 }
 
 dependencies {
+    implementation("org.antlr:antlr4-runtime:4.5.2-1")
+
     // legacy dependencies -
     implementation(fileTree("lib") { include("*.jar") })
 
+    // test dependencies
     testImplementation("junit:junit:4.13.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
