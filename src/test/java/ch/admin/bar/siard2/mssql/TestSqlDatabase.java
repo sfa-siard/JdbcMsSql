@@ -44,7 +44,7 @@ public class TestSqlDatabase
   private static int _iPrimarySimple = -1;
 
   public static String getCircleJpgUrl() {
-    return "file://localhost" + new File("testfiles/circle.jpg").getAbsolutePath();
+    return "file://localhost" + TestSqlDatabase.class.getClassLoader().getResource("circle.jpg").getPath();
   }
 
   @SuppressWarnings("deprecation")
