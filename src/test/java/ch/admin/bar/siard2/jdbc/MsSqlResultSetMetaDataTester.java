@@ -17,7 +17,7 @@ public class MsSqlResultSetMetaDataTester
   extends BaseResultSetMetaDataTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog()) +  ";encrypt=true;trustServerCertificate=true";
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
   

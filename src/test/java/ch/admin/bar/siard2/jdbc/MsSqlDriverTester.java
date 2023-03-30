@@ -10,7 +10,7 @@ import ch.enterag.utils.base.ConnectionProperties;
 public class MsSqlDriverTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog()) +  ";encrypt=true;trustServerCertificate=true";
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
   private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";
@@ -76,7 +76,7 @@ public class MsSqlDriverTester
     int iMajorVersion = _driver.getMajorVersion();
     int iMinorVersion = _driver.getMinorVersion();
     String sVersion = String.valueOf(iMajorVersion)+"."+String.valueOf(iMinorVersion);
-    assertEquals("Wrong MSSQL version "+sVersion+" found!", "4.2", sVersion);
+    assertEquals("Wrong MSSQL version "+sVersion+" found!", "12.2", sVersion);
   } /* testVersion */
   
   @Test
@@ -87,7 +87,7 @@ public class MsSqlDriverTester
       DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, new Properties());
       for (DriverPropertyInfo dpi: apropInfo)
         System.out.println(dpi.name+": "+dpi.value+" ("+String.valueOf(dpi.description)+")");
-      assertSame("Unexpected driver properties!", 29, apropInfo.length);
+      assertSame("Unexpected driver properties!", 75, apropInfo.length);
     }
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
   } /* testDriverProperties */

@@ -11,7 +11,7 @@ plugins {
     `java-library`
 }
 
-version="2.2.2"
+version = "2.2.2"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2-1")
+    implementation("com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre8")
 
     // legacy dependencies -
     implementation(fileTree("lib") { include("*.jar") })
@@ -31,4 +32,19 @@ dependencies {
     testImplementation("org.junit.vintage:junit-vintage-engine")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.jar {
+    archiveFileName.set("jdbcmssql.jar")
+}
+
+tasks.getByName("assemble").dependsOn("testJar")
+
+tasks.register<Jar>("testJar") {
+    archiveFileName.set("jdbcmssql-test.jar")
+    from(project.the<SourceSetContainer>()["test"].output)
 }

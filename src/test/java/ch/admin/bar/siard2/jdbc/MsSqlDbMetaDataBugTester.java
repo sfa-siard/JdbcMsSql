@@ -15,7 +15,7 @@ import ch.admin.bar.siard2.jdbcx.*;
 public class MsSqlDbMetaDataBugTester extends BaseDatabaseMetaDataTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName=bugdb");
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName=bugdb")  + ";encrypt=true;trustServerCertificate=true";
   private static final String _sDB_USER = "buglogin";
   private static final String _sDB_PASSWORD = "bugloginpwd";
   private MsSqlDatabaseMetaData _dmdMsSql = null;

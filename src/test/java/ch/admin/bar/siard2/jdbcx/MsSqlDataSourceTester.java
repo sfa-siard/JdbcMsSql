@@ -11,7 +11,7 @@ public class MsSqlDataSourceTester
 {
   // see https://msdn.microsoft.com/en-us/library/ms378428(v=sql.110).aspx
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = "jdbc:sqlserver://"+_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog();
+  private static final String _sDB_URL = "jdbc:sqlserver://"+_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog()  + ";encrypt=true;trustServerCertificate=true";
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
 
@@ -53,7 +53,7 @@ public class MsSqlDataSourceTester
     try
     {
       int iLoginTimeout = _dsMsSql.getLoginTimeout();
-      assertSame("Unexpected login timeout "+String.valueOf(iLoginTimeout)+"!", 15, iLoginTimeout);
+      assertSame("Unexpected login timeout "+String.valueOf(iLoginTimeout)+"!", 30, iLoginTimeout);
     }
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
   } /* testLoginTimeout */

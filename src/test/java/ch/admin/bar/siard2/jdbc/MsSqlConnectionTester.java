@@ -2,6 +2,8 @@ package ch.admin.bar.siard2.jdbc;
 
 import java.sql.*;
 import static org.junit.Assert.*;
+
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.junit.*;
 import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
@@ -12,7 +14,7 @@ import ch.admin.bar.siard2.jdbcx.*;
 public class MsSqlConnectionTester extends BaseConnectionTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
+  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog()) +  ";encrypt=true;trustServerCertificate=true";
   private static final String _sDB_CATALOG = _cp.getCatalog();
   private static final String _sDB_USER = _cp.getUser();
   private static final String _sDB_PASSWORD = _cp.getPassword();
@@ -69,10 +71,21 @@ public class MsSqlConnectionTester extends BaseConnectionTester
       Array array = _connMsSql.createArrayOf("VARCHAR(256)", new String[] {"a", "b", "c"});
       array.free();
     }
-    catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
+    catch(SQLServerException e) { System.out.println(EU.getExceptionMessage(e)); }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* createArrayOf */
-  
+
+
+  @Test
+  public void testCreateStruct() {
+    try {
+      this._connMsSql.createStruct("TEST_SCHEMA.TEST_STRUCT_TYPE", new String[]{"a", "b", "c"});
+    } catch (SQLServerException e) {
+      System.out.println(EU.getExceptionMessage(e));
+    } catch (SQLException sqlException) {
+      Assert.fail(EU.getExceptionMessage(sqlException));
+    }
+  }
   
   @Test
   @Override
