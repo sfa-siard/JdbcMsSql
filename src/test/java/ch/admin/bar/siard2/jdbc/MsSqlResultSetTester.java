@@ -11,6 +11,9 @@ import java.util.*;
 import javax.xml.datatype.*;
 import static org.junit.Assert.*;
 
+import ch.admin.bar.siard2.ConnectionConfig;
+import ch.admin.bar.siard2.ConnectionUrl;
+import ch.admin.bar.siard2.Credentials;
 import org.junit.*;
 
 import ch.enterag.utils.*;
@@ -26,10 +29,12 @@ import ch.admin.bar.siard2.mssql.*;
 public class MsSqlResultSetTester
   extends BaseResultSetTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog())  + ";encrypt=true;trustServerCertificate=true";
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
+
+  private static ConnectionConfig connectionConfig = new ConnectionConfig(new ConnectionUrl("localhost",
+                                                                                            "1433",
+                                                                                            "testdb"),
+                                                                          new Credentials("sa", "Yukon900"));
+
   private static long _lMsTotalStart = 0;
   private static long _lMsTotal = 0;
   private static long _lMsConnect = 0;
@@ -103,11 +108,7 @@ public class MsSqlResultSetTester
     if (_lMsTotalStart == 0) {
       _lMsTotalStart = System.currentTimeMillis();
     }
-    MsSqlDataSource dsMsSql = new MsSqlDataSource();
-    dsMsSql.setUrl(_sDB_URL);
-    dsMsSql.setUser(_sDB_USER);
-    dsMsSql.setPassword(_sDB_PASSWORD);
-    MsSqlConnection connMsSql = (MsSqlConnection) dsMsSql.getConnection();
+    MsSqlConnection connMsSql = (MsSqlConnection) connectionConfig.connect();
     connMsSql.setAutoCommit(false);
     /* drop and create the test databases */
     long lMsTestDatabaseStart = System.currentTimeMillis();
@@ -164,12 +165,8 @@ public class MsSqlResultSetTester
   {
     try 
     { 
-      MsSqlDataSource dsMsSql = new MsSqlDataSource();
-      dsMsSql.setUrl(_sDB_URL);
-      dsMsSql.setUser(_sDB_USER);
-      dsMsSql.setPassword(_sDB_PASSWORD);
       long lMsConnectStart = System.currentTimeMillis();
-      _conn = dsMsSql.getConnection();
+      _conn = connectionConfig.connect();
       _lMsConnect = _lMsConnect + System.currentTimeMillis() - lMsConnectStart;
       _conn.setAutoCommit(false);
       //openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);

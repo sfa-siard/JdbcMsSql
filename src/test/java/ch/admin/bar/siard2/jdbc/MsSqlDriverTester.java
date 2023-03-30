@@ -3,16 +3,19 @@ package ch.admin.bar.siard2.jdbc;
 import java.sql.*;
 import java.util.*;
 import static org.junit.Assert.*;
+
+import ch.admin.bar.siard2.ConnectionConfig;
+import ch.admin.bar.siard2.ConnectionUrl;
+import ch.admin.bar.siard2.Credentials;
 import org.junit.*;
 
 import ch.enterag.utils.base.ConnectionProperties;
 
 public class MsSqlDriverTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog()) +  ";encrypt=true;trustServerCertificate=true";
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
+
+  private static ConnectionUrl connectionUrl = new ConnectionUrl("localhost", "1433", "testdb");
+
   private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";
   private static final String sTEST_MSSQL_URL = "jdbc:sqlserver://localhost";
   private static final String sINVALID_MSSQL_URL = "jdbc:oracle:thin:@//localhost:1521/orcl";;
@@ -28,7 +31,7 @@ public class MsSqlDriverTester
     try
     {
       _driver = DriverManager.getDriver(sTEST_MSSQL_URL);
-      _conn = DriverManager.getConnection(_sDB_URL, _sDB_USER, _sDB_PASSWORD);
+      _conn = DriverManager.getConnection(connectionUrl.get(), "sa", "Yukon900");
     }
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
   } /* setUp */
@@ -64,7 +67,7 @@ public class MsSqlDriverTester
   {
     try
     {
-      assertSame("Valid MSSQL URL not accepted!", true, _driver.acceptsURL(_sDB_URL));
+      assertSame("Valid MSSQL URL not accepted!", true, _driver.acceptsURL(connectionUrl.get()));
       assertSame("Invalid MSSQL URL accepted!", false, _driver.acceptsURL(sINVALID_MSSQL_URL));
     }
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
@@ -84,7 +87,7 @@ public class MsSqlDriverTester
   {
     try
     {
-      DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, new Properties());
+      DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(connectionUrl.get(), new Properties());
       for (DriverPropertyInfo dpi: apropInfo)
         System.out.println(dpi.name+": "+dpi.value+" ("+String.valueOf(dpi.description)+")");
       assertSame("Unexpected driver properties!", 75, apropInfo.length);
