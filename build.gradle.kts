@@ -18,23 +18,14 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        java {
-            setSrcDirs(listOf("src"))
-        }
-    }
-
-    test {
-        java {
-            setSrcDirs(listOf("test"))
-        }
-    }
-}
-
 dependencies {
     // legacy dependencies -
     implementation(fileTree("lib") { include("*.jar") })
 
     testImplementation("junit:junit:4.13.2")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation("org.junit.vintage:junit-vintage-engine")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
