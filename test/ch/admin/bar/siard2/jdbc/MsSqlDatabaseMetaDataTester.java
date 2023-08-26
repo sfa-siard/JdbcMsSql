@@ -499,21 +499,49 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
     try { print(_dmdMsSql.getProcedureColumns(null,TestSqlDatabase._sTEST_SCHEMA,"%","%")); } 
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   }
+
   @Test
   @Override
-  public void testGetTables()
-  {
-    enter();
-    try { print(_dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"TABLE"})); }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  public void testGetTables() {
+    try {
+      ResultSet resultSet = _dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[]{"TABLE"});
+      verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
+      verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
+      assertFalse(resultSet.next());
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
-  
+
+
   @Test
-  public void testGetViews()
-  {
-    enter();
-    try { print(_dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"VIEW"})); }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  public void testGetViews() throws SQLException {
+    ResultSet resultSet = _dmdMsSql.getTables("testdb", TestSqlDatabase._sTEST_SCHEMA, "%", new String[]{"VIEW"});
+    verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
+    assertFalse(resultSet.next());
+  }
+
+  @Test
+  public void shouldGetAllTypesOfTables() throws SQLException {
+    ResultSet resultSet = _dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", null);
+    verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
+    verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
+    verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
+    assertFalse(resultSet.next());
+  }
+
+  @Test
+  public void shouldGetNoResultForUnknownCatalogName() throws SQLException {
+    ResultSet resultSet = _dmdMsSql.getTables("unknown", TestSqlDatabase._sTEST_SCHEMA, "%", null);
+    assertFalse(resultSet.next());
+  }
+
+  private void verifyTable(ResultSet resultSet, String tableCat, String tableSchema, String tableName, String tableType) throws SQLException {
+    resultSet.next();
+    assertEquals(tableCat, resultSet.getString("TABLE_CAT"));
+    assertEquals(tableSchema, resultSet.getString("TABLE_SCHEM"));
+    assertEquals(tableName, resultSet.getString("TABLE_NAME"));
+    assertEquals(tableType, resultSet.getString("TABLE_TYPE"));
   }
   @Test
   @Override
