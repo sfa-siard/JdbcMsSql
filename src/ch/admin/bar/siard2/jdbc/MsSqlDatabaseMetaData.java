@@ -260,7 +260,10 @@ public class MsSqlDatabaseMetaData
     sbSql.append("  o.name AS TABLE_NAME,\r\n");
     sbSql.append(sbCaseTableType.toString());
     sbSql.append(" AS TABLE_TYPE,\r\n");
-    sbSql.append("  CAST(p.value AS VARCHAR(7500)) AS REMARKS,\r\n");
+    sbSql.append(" STUFF((SELECT DISTINCT '| ' + CONVERT(VARCHAR, p.value)\r\n" );
+    sbSql.append(" FROM sys.extended_properties p\r\n");
+    sbSql.append(" WHERE (p.major_id = o.object_id and p.minor_id = 0 and p.class = 1)\r\n");
+    sbSql.append(" FOR XML PATH ('')), 1, 2, '') AS REMARKS,\r\n");
     sbSql.append("  NULL AS TYPE_CAT,\r\n");
     sbSql.append("  NULL AS TYPE_SCHEM,\r\n");
     sbSql.append("  NULL AS TYPE_NAME,\r\n");
@@ -272,10 +275,6 @@ public class MsSqlDatabaseMetaData
     sbSql.append("    ON (o.schema_id = s.schema_id)\r\n");
     sbSql.append("  LEFT JOIN sys.sql_modules m\r\n"); 
     sbSql.append("    ON (m.object_id = o.object_id)\r\n");
-    sbSql.append("  LEFT JOIN sys.extended_properties p\r\n");
-    sbSql.append("    ON (p.major_id = o.object_id\r\n");
-    sbSql.append("        AND p.minor_id = 0\r\n");
-    sbSql.append("        AND p.class = 1)\r\n");
     sbSql.append("WHERE\r\n");
     sbSql.append(sbCondition.toString());
     sbSql.append("ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME");
