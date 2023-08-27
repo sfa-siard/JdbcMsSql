@@ -210,11 +210,12 @@ public class MsSqlDatabaseMetaData
                                String[] types) throws SQLException {
         return getConnection().createStatement()
                               .unwrap(Statement.class)
-                              .executeQuery(buildGetTablesQuery(catalog, schemaPattern, tableNamePattern, types));
+                              .executeQuery(buildGetTablesQuery(catalog, schemaPattern, tableNamePattern, types,
+                                                                getSearchStringEscape()));
     }
 
     private String buildGetTablesQuery(String catalog, String schemaPattern, String tableNamePattern,
-                                       String[] types) throws SQLException {
+                                       String[] types, String searchStringEscape) {
         if (types == null) types = new String[]{"TABLE", "VIEW", "TABLE TYPE", "SYSTEM TABLE"};
         StringBuilder sbCondition = new StringBuilder();
         for (int i = 0; i < types.length; i++) {
@@ -236,7 +237,6 @@ public class MsSqlDatabaseMetaData
         }
         if (catalog != null)
             sbCondition.append(" AND DB_NAME() = " + SqlLiterals.formatStringLiteral(catalog) + "\r\n");
-        String searchStringEscape = getSearchStringEscape();
         if (schemaPattern != null)
             sbCondition.append(" AND s.name LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) + " ESCAPE '" + searchStringEscape + "'\r\n");
         if (tableNamePattern != null)
