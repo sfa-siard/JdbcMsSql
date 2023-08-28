@@ -26,6 +26,20 @@ ant release
 
 This task increments the version number in the project [MANIFEST.MF](./src/META-INF/MANIFEST.MF)
 
+## Using Gradle and Testcontainers
+
+A gradual migration to gradle has started. The roadmap for this migration looks as follows:
+
+- [x] Enable unit tests using testcontainers
+- [ ] Equivalent testing results for ant and gradle tests (see github pipelines)
+- [ ] Create archives and zip distribution with gradle that are equivalent to the ones generated with ant
+- [ ] Add the release plugin used in siard-suite for consistent versioning and releasing of all repositories
+- [ ] Remove ant as build tool
+- [ ] Migrate project folder structure to match the standard maven project layout
+- [ ] Remove the lib folder and let gradle manage all dependencies
+
+In order to implement the last step, all other dependent siard repositories must be migrated to gradle
+
 
 ## Documentation
 [./doc/manual/user/index.html](./doc/manual/user/index.html) contains the manual for using the binaries.
