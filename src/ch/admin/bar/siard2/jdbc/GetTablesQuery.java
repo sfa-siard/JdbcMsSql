@@ -23,61 +23,13 @@ class GetTablesQuery {
         this.schemaPattern = schemaPattern;
         this.tableNamePattern = tableNamePattern;
         this.searchStringEscape = searchStringEscape;
-
     }
 
     String build() {
-        StringBuilder sbCondition = new StringBuilder();
-        for (int i = 0; i < types.length; i++) {
-            if (i == 0) {
-                if (types.length > 1) sbCondition.append(" (");
-            } else sbCondition.append("  OR ");
-            sbCondition.append("o.type = '");
-            switch (types[i]) {
-                case "TABLE":
-                    sbCondition.append("U");
-                    break;
-                case "VIEW":
-                    sbCondition.append("V");
-                    break;
-                case "TABLE TYPE":
-                    sbCondition.append("TT");
-                    break;
-                case "SYSTEM TABLE":
-                    sbCondition.append("S");
-                    break;
-            }
-            sbCondition.append("' AND is_ms_shipped = ");
-            if (!types[i].equals("SYSTEM TABLE")) sbCondition.append("0");
-            else sbCondition.append("1");
-            if (i == types.length - 1) {
-                if (types.length > 1) sbCondition.append(")");
-            }
-            sbCondition.append("\r\n");
-        }
-        if (catalog != null)
-            sbCondition.append(" AND DB_NAME() = ").append(SqlLiterals.formatStringLiteral(catalog)).append("\r\n");
-        if (schemaPattern != null)
-            sbCondition.append(" AND s.name LIKE ")
-                       .append(SqlLiterals.formatStringLiteral(schemaPattern))
-                       .append(" ESCAPE '")
-                       .append(searchStringEscape)
-                       .append("'\r\n");
-        if (tableNamePattern != null)
-            sbCondition.append(" AND o.name LIKE ")
-                       .append(SqlLiterals.formatStringLiteral(tableNamePattern))
-                       .append(" ESCAPE '")
-                       .append(searchStringEscape)
-                       .append("'\r\n");
-        String sbCaseTableType = "  case o.type\r\n" + "    when 'U' then 'TABLE'\r\n" +
-                "    when 'V' then 'VIEW'\r\n" +
-                "    when 'TT' then 'TABLE TYPE'\r\n" +
-                "    else 'SYSTEM TABLE'\r\n" +
-                "  end";
         return "SELECT\r\n" + "  DB_NAME() AS TABLE_CAT,\r\n" +
                 "  s.name AS TABLE_SCHEM,\r\n" +
                 "  o.name AS TABLE_NAME,\r\n" +
-                sbCaseTableType +
+                getCaseTableType() +
                 " AS TABLE_TYPE,\r\n" +
                 " STUFF((SELECT DISTINCT '| ' + CONVERT(VARCHAR, p.value)\r\n" +
                 " FROM sys.extended_properties p\r\n" +
@@ -95,7 +47,61 @@ class GetTablesQuery {
                 "  LEFT JOIN sys.sql_modules m\r\n" +
                 "    ON (m.object_id = o.object_id)\r\n" +
                 "WHERE\r\n" +
-                sbCondition +
+                getCondition() +
                 "ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME";
+    }
+
+    private static String getCaseTableType() {
+        return "  case o.type\r\n" + "    when 'U' then 'TABLE'\r\n" +
+                "    when 'V' then 'VIEW'\r\n" +
+                "    when 'TT' then 'TABLE TYPE'\r\n" +
+                "    else 'SYSTEM TABLE'\r\n" +
+                "  end";
+    }
+
+    private StringBuilder getCondition() {
+        StringBuilder queryCondition = new StringBuilder();
+        for (int i = 0; i < types.length; i++) {
+            if (i == 0) {
+                if (types.length > 1) queryCondition.append(" (");
+            } else queryCondition.append("  OR ");
+            queryCondition.append("o.type = '");
+            switch (types[i]) {
+                case "TABLE":
+                    queryCondition.append("U");
+                    break;
+                case "VIEW":
+                    queryCondition.append("V");
+                    break;
+                case "TABLE TYPE":
+                    queryCondition.append("TT");
+                    break;
+                case "SYSTEM TABLE":
+                    queryCondition.append("S");
+                    break;
+            }
+            queryCondition.append("' AND is_ms_shipped = ");
+            if (!types[i].equals("SYSTEM TABLE")) queryCondition.append("0");
+            else queryCondition.append("1");
+            if (i == types.length - 1) {
+                if (types.length > 1) queryCondition.append(")");
+            }
+            queryCondition.append("\r\n");
+        }
+        if (catalog != null)
+            queryCondition.append(" AND DB_NAME() = ").append(SqlLiterals.formatStringLiteral(catalog)).append("\r\n");
+        if (schemaPattern != null)
+            queryCondition.append(" AND s.name LIKE ")
+                       .append(SqlLiterals.formatStringLiteral(schemaPattern))
+                       .append(" ESCAPE '")
+                       .append(searchStringEscape)
+                       .append("'\r\n");
+        if (tableNamePattern != null)
+            queryCondition.append(" AND o.name LIKE ")
+                       .append(SqlLiterals.formatStringLiteral(tableNamePattern))
+                       .append(" ESCAPE '")
+                       .append(searchStringEscape)
+                       .append("'\r\n");
+        return queryCondition;
     }
 }
