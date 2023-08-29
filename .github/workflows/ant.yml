@@ -7,7 +7,8 @@ on:
   push:
     branches:
       - main
-      - dev/pitc-*
+      - feature/*
+      - issue/*
   pull_request:
     branches: [ main ]
 

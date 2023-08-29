@@ -9,6 +9,9 @@ import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 import ch.admin.bar.siard2.jdbcx.*;
 
+
+// should probably test some obscure bug - but there is no documentation about that and how the db should be set up...
+@Ignore
 public class MsSqlDbMetaDataBugTester extends BaseDatabaseMetaDataTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
