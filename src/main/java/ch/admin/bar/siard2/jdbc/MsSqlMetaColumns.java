@@ -62,28 +62,28 @@ public class MsSqlMetaColumns
     mapNAME_MSSQL_TO_ISO.put("datetime2",PreType.TIMESTAMP);
     mapNAME_MSSQL_TO_ISO.put("datetimeoffset",PreType.VARCHAR);
     
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.BINARY), Integer.valueOf(Types.BINARY));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.VARBINARY), Integer.valueOf(Types.VARBINARY));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.LONGVARBINARY), Integer.valueOf(Types.BLOB));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.CHAR), Integer.valueOf(Types.CHAR));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.VARCHAR), Integer.valueOf(Types.VARCHAR));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.LONGVARCHAR), Integer.valueOf(Types.CLOB));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.NCHAR), Integer.valueOf(Types.NCHAR));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.NVARCHAR), Integer.valueOf(Types.NVARCHAR));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.LONGNVARCHAR), Integer.valueOf(Types.NCLOB)); // or SQLXML!
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.BIT), Integer.valueOf(Types.BOOLEAN));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.TINYINT), Integer.valueOf(Types.SMALLINT));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.SMALLINT), Integer.valueOf(Types.SMALLINT));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.INTEGER), Integer.valueOf(Types.INTEGER));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.BIGINT), Integer.valueOf(Types.BIGINT));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.DECIMAL), Integer.valueOf(Types.DECIMAL));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.NUMERIC), Integer.valueOf(Types.NUMERIC));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.REAL), Integer.valueOf(Types.REAL));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.DOUBLE), Integer.valueOf(Types.DOUBLE));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.DATE), Integer.valueOf(Types.DATE));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.TIME), Integer.valueOf(Types.TIME));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(Types.TIMESTAMP), Integer.valueOf(Types.TIMESTAMP));
-    mapTYPE_MSSQL_TO_ISO.put(Integer.valueOf(-155), Integer.valueOf(Types.VARCHAR)); // DateTimeOffset
+    mapTYPE_MSSQL_TO_ISO.put(Types.BINARY, Types.BINARY);
+    mapTYPE_MSSQL_TO_ISO.put(Types.VARBINARY, Types.VARBINARY);
+    mapTYPE_MSSQL_TO_ISO.put(Types.LONGVARBINARY, Types.BLOB);
+    mapTYPE_MSSQL_TO_ISO.put(Types.CHAR, Types.CHAR);
+    mapTYPE_MSSQL_TO_ISO.put(Types.VARCHAR, Types.VARCHAR);
+    mapTYPE_MSSQL_TO_ISO.put(Types.LONGVARCHAR, Types.CLOB);
+    mapTYPE_MSSQL_TO_ISO.put(Types.NCHAR, Types.NCHAR);
+    mapTYPE_MSSQL_TO_ISO.put(Types.NVARCHAR, Types.NVARCHAR);
+    mapTYPE_MSSQL_TO_ISO.put(Types.LONGNVARCHAR, Types.NCLOB); // or SQLXML!
+    mapTYPE_MSSQL_TO_ISO.put(Types.BIT, Types.BOOLEAN);
+    mapTYPE_MSSQL_TO_ISO.put(Types.TINYINT, Types.SMALLINT);
+    mapTYPE_MSSQL_TO_ISO.put(Types.SMALLINT, Types.SMALLINT);
+    mapTYPE_MSSQL_TO_ISO.put(Types.INTEGER, Types.INTEGER);
+    mapTYPE_MSSQL_TO_ISO.put(Types.BIGINT, Types.BIGINT);
+    mapTYPE_MSSQL_TO_ISO.put(Types.DECIMAL, Types.DECIMAL);
+    mapTYPE_MSSQL_TO_ISO.put(Types.NUMERIC, Types.NUMERIC);
+    mapTYPE_MSSQL_TO_ISO.put(Types.REAL, Types.REAL);
+    mapTYPE_MSSQL_TO_ISO.put(Types.DOUBLE, Types.DOUBLE);
+    mapTYPE_MSSQL_TO_ISO.put(Types.DATE, Types.DATE);
+    mapTYPE_MSSQL_TO_ISO.put(Types.TIME, Types.TIME);
+    mapTYPE_MSSQL_TO_ISO.put(Types.TIMESTAMP, Types.TIMESTAMP);
+    mapTYPE_MSSQL_TO_ISO.put(-155, Types.VARCHAR); // DateTimeOffset
   }
   
   private int _iCatalog = -1;
@@ -103,18 +103,18 @@ public class MsSqlMetaColumns
     if (sTypeName.startsWith("\"") && sTypeName.endsWith("\""))
       sTypeName = sTypeName.substring(1,sTypeName.length()-1);
     if (sTypeName.equals("xml"))
-      iType = Integer.valueOf(Types.SQLXML);
+      iType = Types.SQLXML;
     else if (sTypeName.equals("datetimeoffset"))
-      iType = Integer.valueOf(Types.VARCHAR);
+      iType = Types.VARCHAR;
     else if (sTypeName.equals("sql_variant"))
-      iType = Integer.valueOf(Types.VARBINARY);
+      iType = Types.VARBINARY;
     else
     {
       if (sTypeName.endsWith(sIDENTITY_SUFFIX))
         sTypeName = sTypeName.substring(0,sTypeName.length()-sIDENTITY_SUFFIX.length()).trim();
       PreType pt = mapNAME_MSSQL_TO_ISO.get(sTypeName);
       if (pt != null)
-        iType = mapTYPE_MSSQL_TO_ISO.get(Integer.valueOf(iType)).intValue();
+        iType = mapTYPE_MSSQL_TO_ISO.get(iType);
       else
       {
         MsSqlDatabaseMetaData dmd = (MsSqlDatabaseMetaData)conn.getMetaData();
@@ -177,16 +177,49 @@ public class MsSqlMetaColumns
     throws SQLException
   {
     PreType pt = mapNAME_MSSQL_TO_ISO.get(sTypeName);
-    /***
     if (pt != null)
     {
-      BaseSqlFactory bsf = new BaseSqlFactory();
-      PredefinedType preType = bsf.newPredefinedType();
-      preType.initialize(pt.getSqlType(), iColumnSize, iDecimals);
-      sTypeName = preType.format();
+      // Format type name with precision/scale information
+      // iColumnSize represents: length for character/binary types, precision for numeric types
+      // iDecimals represents: scale for numeric types, fractional seconds precision for datetime types
+      switch (sTypeName) {
+        // Character and binary types that use length parameter
+        // Examples: char(10), varchar(255), nvarchar(max), binary(8)
+        case "char":
+        case "varchar":
+        case "nchar":
+        case "nvarchar":
+        case "binary":
+        case "varbinary":
+          if (iColumnSize > 0) {
+            sTypeName = sTypeName + "(" + iColumnSize + ")";
+          }
+          break;
+          
+        // Numeric types that use precision and scale parameters
+        // Examples: decimal(10,2), numeric(18,0)
+        case "numeric":
+        case "decimal":
+          if (iColumnSize > 0) {
+            sTypeName = sTypeName + "(" + iColumnSize;
+            if (iDecimals > 0) {
+              sTypeName = sTypeName + "," + iDecimals;
+            }
+            sTypeName = sTypeName + ")";
+          }
+          break;
+          
+        // Datetime types that use fractional seconds precision parameter
+        // Examples: datetime2(7), time(3)
+        case "datetime2":
+        case "time":
+          if (iDecimals > 0) {
+            sTypeName = sTypeName + "(" + iDecimals + ")";
+          }
+          break;
+      }
     }
-    ***/
-    if (pt == null)
+    else
     {
       String sTypeSchema = null;
       MsSqlDatabaseMetaData dmd = (MsSqlDatabaseMetaData)conn.getMetaData();
