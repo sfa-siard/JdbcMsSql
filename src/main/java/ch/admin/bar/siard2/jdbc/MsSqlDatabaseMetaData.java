@@ -33,63 +33,63 @@ public class MsSqlDatabaseMetaData
     private static Map<Integer, Integer> _mapTYPE_TO_ISO = new HashMap<Integer, Integer>();
   static
   {
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.IMAGE.getSystemTypeId()), Integer.valueOf(java.sql.Types.BLOB));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.TEXT.getSystemTypeId()), Integer.valueOf(java.sql.Types.CLOB));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.UUID.getSystemTypeId()), Integer.valueOf(java.sql.Types.CHAR));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.DATE.getSystemTypeId()), Integer.valueOf(java.sql.Types.DATE));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.TIME.getSystemTypeId()), Integer.valueOf(java.sql.Types.TIME));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.DATETIME2.getSystemTypeId()), Integer.valueOf(java.sql.Types.TIMESTAMP));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.DATETIMEOFFSET.getSystemTypeId()), Integer.valueOf(java.sql.Types.OTHER));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.TINYINT.getSystemTypeId()), Integer.valueOf(java.sql.Types.TINYINT));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.SMALLINT.getSystemTypeId()), Integer.valueOf(java.sql.Types.SMALLINT));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.INTEGER.getSystemTypeId()), Integer.valueOf(java.sql.Types.INTEGER));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.SMALLDATETIME.getSystemTypeId()), Integer.valueOf(java.sql.Types.TIMESTAMP));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.REAL.getSystemTypeId()), Integer.valueOf(java.sql.Types.REAL));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.MONEY.getSystemTypeId()), Integer.valueOf(java.sql.Types.DECIMAL));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.DATETIME.getSystemTypeId()), Integer.valueOf(java.sql.Types.TIMESTAMP));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.FLOAT.getSystemTypeId()), Integer.valueOf(java.sql.Types.FLOAT));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.SQL_VARIANT.getSystemTypeId()), Integer.valueOf(java.sql.Types.OTHER));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.NTEXT.getSystemTypeId()), Integer.valueOf(java.sql.Types.NCLOB));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.BIT.getSystemTypeId()), Integer.valueOf(java.sql.Types.BOOLEAN));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.DECIMAL.getSystemTypeId()), Integer.valueOf(java.sql.Types.DECIMAL));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.NUMERIC.getSystemTypeId()), Integer.valueOf(java.sql.Types.NUMERIC));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.SMALLMONEY.getSystemTypeId()), Integer.valueOf(java.sql.Types.DECIMAL));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.BIGINT.getSystemTypeId()), Integer.valueOf(java.sql.Types.BIGINT));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.VARBINARY.getSystemTypeId()), Integer.valueOf(java.sql.Types.VARBINARY));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.VARCHAR.getSystemTypeId()), Integer.valueOf(java.sql.Types.VARCHAR));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.BINARY.getSystemTypeId()), Integer.valueOf(java.sql.Types.BINARY));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.CHAR.getSystemTypeId()), Integer.valueOf(java.sql.Types.CHAR));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.TIMESTAMP.getSystemTypeId()), Integer.valueOf(java.sql.Types.BINARY));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.NVARCHAR.getSystemTypeId()), Integer.valueOf(java.sql.Types.NVARCHAR));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.NCHAR.getSystemTypeId()), Integer.valueOf(java.sql.Types.NCHAR));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.CLRUDT.getSystemTypeId()), Integer.valueOf(java.sql.Types.JAVA_OBJECT));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.XML.getSystemTypeId()), Integer.valueOf(java.sql.Types.SQLXML));
-    _mapTYPE_MSSQL_TO_JAVA.put(Integer.valueOf(MsSqlType.TABLEUDT.getSystemTypeId()), Integer.valueOf(java.sql.Types.STRUCT));
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.IMAGE.getSystemTypeId(), Types.BLOB);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.TEXT.getSystemTypeId(), Types.CLOB);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.UUID.getSystemTypeId(), Types.CHAR);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.DATE.getSystemTypeId(), Types.DATE);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.TIME.getSystemTypeId(), Types.TIME);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.DATETIME2.getSystemTypeId(), Types.TIMESTAMP);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.DATETIMEOFFSET.getSystemTypeId(), Types.OTHER);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.TINYINT.getSystemTypeId(), Types.TINYINT);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.SMALLINT.getSystemTypeId(), Types.SMALLINT);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.INTEGER.getSystemTypeId(), Types.INTEGER);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.SMALLDATETIME.getSystemTypeId(), Types.TIMESTAMP);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.REAL.getSystemTypeId(), Types.REAL);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.MONEY.getSystemTypeId(), Types.DECIMAL);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.DATETIME.getSystemTypeId(), Types.TIMESTAMP);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.FLOAT.getSystemTypeId(), Types.FLOAT);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.SQL_VARIANT.getSystemTypeId(), Types.OTHER);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.NTEXT.getSystemTypeId(), Types.NCLOB);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.BIT.getSystemTypeId(), Types.BOOLEAN);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.DECIMAL.getSystemTypeId(), Types.DECIMAL);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.NUMERIC.getSystemTypeId(), Types.NUMERIC);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.SMALLMONEY.getSystemTypeId(), Types.DECIMAL);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.BIGINT.getSystemTypeId(), Types.BIGINT);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.VARBINARY.getSystemTypeId(), Types.VARBINARY);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.VARCHAR.getSystemTypeId(), Types.VARCHAR);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.BINARY.getSystemTypeId(), Types.BINARY);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.CHAR.getSystemTypeId(), Types.CHAR);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.TIMESTAMP.getSystemTypeId(), Types.BINARY);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.NVARCHAR.getSystemTypeId(), Types.NVARCHAR);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.NCHAR.getSystemTypeId(), Types.NCHAR);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.CLRUDT.getSystemTypeId(), Types.JAVA_OBJECT);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.XML.getSystemTypeId(), Types.SQLXML);
+    _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.TABLEUDT.getSystemTypeId(), Types.STRUCT);
 
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.CHAR), Integer.valueOf(Types.CHAR));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.VARCHAR), Integer.valueOf(Types.VARCHAR));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.CLOB), Integer.valueOf(Types.CLOB));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.NCHAR), Integer.valueOf(Types.NCHAR));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.NVARCHAR), Integer.valueOf(Types.NVARCHAR));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.NCLOB), Integer.valueOf(Types.NCLOB));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.SQLXML), Integer.valueOf(Types.SQLXML));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.VARBINARY), Integer.valueOf(Types.VARBINARY));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.BINARY), Integer.valueOf(Types.BINARY));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.BLOB), Integer.valueOf(Types.BLOB));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.DECIMAL), Integer.valueOf(Types.DECIMAL));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.NUMERIC), Integer.valueOf(Types.NUMERIC));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.TINYINT), Integer.valueOf(Types.SMALLINT));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.SMALLINT), Integer.valueOf(Types.SMALLINT));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.INTEGER), Integer.valueOf(Types.INTEGER));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.BIGINT), Integer.valueOf(Types.BIGINT));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.REAL), Integer.valueOf(Types.REAL));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.FLOAT), Integer.valueOf(Types.FLOAT));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.BOOLEAN), Integer.valueOf(Types.BOOLEAN));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.DATE), Integer.valueOf(Types.DATE));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.TIME), Integer.valueOf(Types.TIME));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.TIMESTAMP), Integer.valueOf(Types.TIMESTAMP));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.OTHER), Integer.valueOf(Types.BLOB));
-        _mapTYPE_TO_ISO.put(Integer.valueOf(Types.JAVA_OBJECT), Integer.valueOf(Types.BLOB));
+        _mapTYPE_TO_ISO.put(Types.CHAR, Types.CHAR);
+        _mapTYPE_TO_ISO.put(Types.VARCHAR, Types.VARCHAR);
+        _mapTYPE_TO_ISO.put(Types.CLOB, Types.CLOB);
+        _mapTYPE_TO_ISO.put(Types.NCHAR, Types.NCHAR);
+        _mapTYPE_TO_ISO.put(Types.NVARCHAR, Types.NVARCHAR);
+        _mapTYPE_TO_ISO.put(Types.NCLOB, Types.NCLOB);
+        _mapTYPE_TO_ISO.put(Types.SQLXML, Types.SQLXML);
+        _mapTYPE_TO_ISO.put(Types.VARBINARY, Types.VARBINARY);
+        _mapTYPE_TO_ISO.put(Types.BINARY, Types.BINARY);
+        _mapTYPE_TO_ISO.put(Types.BLOB, Types.BLOB);
+        _mapTYPE_TO_ISO.put(Types.DECIMAL, Types.DECIMAL);
+        _mapTYPE_TO_ISO.put(Types.NUMERIC, Types.NUMERIC);
+        _mapTYPE_TO_ISO.put(Types.TINYINT, Types.SMALLINT);
+        _mapTYPE_TO_ISO.put(Types.SMALLINT, Types.SMALLINT);
+        _mapTYPE_TO_ISO.put(Types.INTEGER, Types.INTEGER);
+        _mapTYPE_TO_ISO.put(Types.BIGINT, Types.BIGINT);
+        _mapTYPE_TO_ISO.put(Types.REAL, Types.REAL);
+        _mapTYPE_TO_ISO.put(Types.FLOAT, Types.FLOAT);
+        _mapTYPE_TO_ISO.put(Types.BOOLEAN, Types.BOOLEAN);
+        _mapTYPE_TO_ISO.put(Types.DATE, Types.DATE);
+        _mapTYPE_TO_ISO.put(Types.TIME, Types.TIME);
+        _mapTYPE_TO_ISO.put(Types.TIMESTAMP, Types.TIMESTAMP);
+        _mapTYPE_TO_ISO.put(Types.OTHER, Types.BLOB);
+        _mapTYPE_TO_ISO.put(Types.JAVA_OBJECT, Types.BLOB);
     }
 
     /* map SPECIFIC_NAME ... */
@@ -279,7 +279,7 @@ public class MsSqlDatabaseMetaData
     for (int i = 0; i < MsSqlType.values().length; i++)
     {
             MsSqlType mst = MsSqlType.values()[i];
-            int iType = _mapTYPE_MSSQL_TO_JAVA.get(mst.getSystemTypeId()).intValue();
+            int iType = _mapTYPE_MSSQL_TO_JAVA.get(mst.getSystemTypeId());
       if (iType != Types.STRUCT)
       {
                 if (i > 0)
@@ -287,7 +287,7 @@ public class MsSqlDatabaseMetaData
                 sbCaseBaseType.append("when ");
                 sbCaseBaseType.append(String.valueOf(mst.getSystemTypeId()));
                 sbCaseBaseType.append(" then ");
-                sbCaseBaseType.append(_mapTYPE_TO_ISO.get(Integer.valueOf(iType)).toString());
+                sbCaseBaseType.append(_mapTYPE_TO_ISO.get(iType).toString());
             }
         }
         sbCaseBaseType.append("\r\nelse NULL\r\n");
