@@ -40,7 +40,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:1.19.0")
     testImplementation("org.testcontainers:mssqlserver:1.19.0")
     testImplementation("org.hamcrest:hamcrest-core:1.3")
-/*    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))*/
+    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
