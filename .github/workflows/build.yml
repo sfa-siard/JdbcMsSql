@@ -21,8 +21,27 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - name: Run Tests for specific issues
-        run: ./gradlew test --tests ch.admin.bar.siard2.issues.*
-
-
-
+      
+      # Tests require a running SQL Server
+      - name: run docker-compose
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "up -d --build"
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+      - name: check logs of docker-compose
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "logs"
+      
+      - name: Run unit tests
+        run: ./gradlew test
+      - name: Store reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/

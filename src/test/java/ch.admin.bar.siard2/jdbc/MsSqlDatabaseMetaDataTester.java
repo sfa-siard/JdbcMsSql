@@ -122,7 +122,12 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
           iPosition++;
           int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
           assertEquals("Invalid position encountered!",iPosition,iOrdinalPosition);
-          switch(sTypeName)
+          String sBaseTypeName = sTypeName;
+          int iParenIndex = sTypeName.indexOf('(');
+          if (iParenIndex > 0) {
+            sBaseTypeName = sTypeName.substring(0, iParenIndex).trim();
+          }
+          switch(sBaseTypeName)
           {
             case "CHAR": assertEquals("Invalid CHAR mapping!",Types.CHAR,iDataType); break;
             case "char": assertEquals("Invalid char mapping!",Types.CHAR,iDataType); break;
