@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*====================================================================*/
 /** MsSqlDatabaseMetaData implements wrapped MSSQL DatabaseMetaData.
  * @author Hartwig Thomas
  */
@@ -95,7 +94,6 @@ public class MsSqlDatabaseMetaData
         _mapTYPE_TO_ISO.put(Types.JAVA_OBJECT, Types.BLOB);
     }
 
-    /* map SPECIFIC_NAME ... */
   private class MetaSpecificName extends MsSqlResultSet
   {
         private static final String sSPECIFIC_NAME = "SPECIFIC_NAME";
@@ -109,7 +107,7 @@ public class MsSqlDatabaseMetaData
             super(rsWrapped, conn);
             _iSpecificName = iSpecificName;
             _iProcedureName = iProcedureName;
-        } /* constructor */
+    }
 
         @Override
     public String getString(int columnIndex) throws SQLException
@@ -117,7 +115,7 @@ public class MsSqlDatabaseMetaData
             if (columnIndex == _iSpecificName)
                 columnIndex = _iProcedureName;
             return super.getString(columnIndex);
-        } /* getString */
+    }
 
         @Override
     public String getString(String columnLabel) throws SQLException
@@ -138,10 +136,9 @@ public class MsSqlDatabaseMetaData
       else
                 sResult = super.getString(columnLabel);
             return sResult;
-        } /* getString */
-    } /* MetaSpecificName */
+    }
+  }
 
-    /*------------------------------------------------------------------*/
   /** constructor
      * @param dmdWrapped database meta data to be wrapped.
      */
@@ -149,17 +146,15 @@ public class MsSqlDatabaseMetaData
   {
         super(dmdWrapped);
         _conn = conn;
-    } /* constructor */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
   public Connection getConnection() throws SQLException
   {
         return _conn;
-    } /* getConnection */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc}
      * Use MsSqlMetaColumn for data type translation.
      */
@@ -171,17 +166,15 @@ public class MsSqlDatabaseMetaData
         return new MsSqlMetaColumns(super.getColumns(catalog, schemaPattern,
                                                      tableNamePattern, columnNamePattern), _conn,
                                     1, 2, 5, 6, 7, 7, 9);
-    } /* getColumns */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
   public ResultSet getTypeInfo() throws SQLException
   {
         return super.getTypeInfo();
-    } /* getTypeInfo */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getProcedures(String catalog, String schemaPattern,
@@ -190,9 +183,8 @@ public class MsSqlDatabaseMetaData
         return new MetaSpecificName(
                 super.getProcedures(catalog, schemaPattern, procedureNamePattern),
                 _conn, 3, 9);
-    } /* getProcedures */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getProcedureColumns(String catalog,
@@ -204,7 +196,7 @@ public class MsSqlDatabaseMetaData
                         super.getProcedureColumns(catalog, schemaPattern, procedureNamePattern, columnNamePattern),
                         _conn, 1, 2, 6, 7, 8, 9, 10),
                 _conn, 3, 20);
-    } /* getProcedureColumns */
+  }
 
     /**
      * {@inheritDoc}
@@ -222,9 +214,8 @@ public class MsSqlDatabaseMetaData
     throws SQLException
   {
         return super.getTableTypes();
-    } /* getTableTypes */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getUDTs(String catalog, String schemaPattern,
@@ -317,9 +308,8 @@ public class MsSqlDatabaseMetaData
                 "ORDER BY DATA_TYPE, TYPE_CAT, TYPE_SCHEM, TYPE_NAME";
         Statement stmt = getConnection().createStatement();
         return stmt.unwrap(Statement.class).executeQuery(sSql);
-    } /* getUDTs */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getAttributes(String catalog, String schemaPattern,
@@ -329,9 +319,8 @@ public class MsSqlDatabaseMetaData
         return new MsSqlMetaColumns(
                 super.getAttributes(catalog, schemaPattern, typeNamePattern, attributeNamePattern),
                 _conn, 1, 2, 5, 6, 7, 7, 8);
-    } /* getAttributes */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getFunctions(String catalog, String schemaPattern,
@@ -340,9 +329,8 @@ public class MsSqlDatabaseMetaData
         return new MetaSpecificName(
                 super.getFunctions(catalog, schemaPattern, functionNamePattern),
                 _conn, 3, 6);
-    } /* getFunctions */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getFunctionColumns(String catalog,
@@ -355,9 +343,8 @@ public class MsSqlDatabaseMetaData
                         _conn, 1, 2, 6, 7, 8, 9, 10),
                 _conn, 3, 17);
 
-    } /* getFunctionColumns */
+  }
 
-    /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
     @Override
     public ResultSet getCrossReference(
@@ -451,7 +438,7 @@ public class MsSqlDatabaseMetaData
         // "ORDER BY TC.TABLE_SCHEMA, TC.TABLE_NAME,KCU.POSITION_IN_UNIQUE_CONSTRAINT";
         Statement stmt = this.getConnection().createStatement();
         return stmt.unwrap(Statement.class).executeQuery(sSql);
-    } /* getCrossReference */
+  }
 
     @Override
     public ResultSet getSchemas(String catalog, String schemaPattern) throws SQLException {
@@ -463,18 +450,15 @@ public class MsSqlDatabaseMetaData
 
         List<String> whereClauses = new ArrayList<>();
 
-        // Filter by catalog (database name)
         if (catalog != null) {
             whereClauses.add("CATALOG_NAME = " + SqlLiterals.formatStringLiteral(catalog));
         }
 
-        // Filter by schema pattern
         if (schemaPattern != null) {
             whereClauses.add("SCHEMA_NAME LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) +
                     " ESCAPE '" + getSearchStringEscape() + "'");
         }
 
-        // Append WHERE conditions if any
         if (!whereClauses.isEmpty()) {
             sb.append("WHERE ");
             sb.append(String.join(" AND ", whereClauses));
@@ -488,4 +472,4 @@ public class MsSqlDatabaseMetaData
     }
 
 
-} /* class MsSqlDatabaseMetaData */
+}
