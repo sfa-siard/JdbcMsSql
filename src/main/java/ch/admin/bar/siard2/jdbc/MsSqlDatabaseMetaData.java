@@ -10,14 +10,17 @@ Created    : 01.06.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.jdbc;
 
-import java.text.*;
-import java.util.*;
-import java.sql.*;
+import ch.admin.bar.siard2.mssql.MsSqlType;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
-import ch.admin.bar.siard2.mssql.*;
+import java.sql.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*====================================================================*/
 /** MsSqlDatabaseMetaData implements wrapped MSSQL DatabaseMetaData.
@@ -449,5 +452,40 @@ public class MsSqlDatabaseMetaData
         Statement stmt = this.getConnection().createStatement();
         return stmt.unwrap(Statement.class).executeQuery(sSql);
     } /* getCrossReference */
+
+    @Override
+    public ResultSet getSchemas(String catalog, String schemaPattern) throws SQLException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT\r\n");
+        sb.append("  SCHEMA_NAME AS TABLE_SCHEM,\r\n");
+        sb.append("  CATALOG_NAME AS TABLE_CATALOG\r\n");
+        sb.append("FROM INFORMATION_SCHEMA.SCHEMATA\r\n");
+
+        List<String> whereClauses = new ArrayList<>();
+
+        // Filter by catalog (database name)
+        if (catalog != null) {
+            whereClauses.add("CATALOG_NAME = " + SqlLiterals.formatStringLiteral(catalog));
+        }
+
+        // Filter by schema pattern
+        if (schemaPattern != null) {
+            whereClauses.add("SCHEMA_NAME LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) +
+                    " ESCAPE '" + getSearchStringEscape() + "'");
+        }
+
+        // Append WHERE conditions if any
+        if (!whereClauses.isEmpty()) {
+            sb.append("WHERE ");
+            sb.append(String.join(" AND ", whereClauses));
+            sb.append("\r\n");
+        }
+
+        sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEM");
+
+        Statement stmt = getConnection().createStatement();
+        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+    }
+
 
 } /* class MsSqlDatabaseMetaData */
