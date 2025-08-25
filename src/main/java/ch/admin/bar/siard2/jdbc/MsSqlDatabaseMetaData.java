@@ -29,10 +29,10 @@ public class MsSqlDatabaseMetaData
         extends BaseDatabaseMetaData
   implements DatabaseMetaData
 {
-    private MsSqlConnection _conn = null;
+    private final MsSqlConnection _conn;
 
-    private static Map<Integer, Integer> _mapTYPE_MSSQL_TO_JAVA = new HashMap<Integer, Integer>();
-    private static Map<Integer, Integer> _mapTYPE_TO_ISO = new HashMap<Integer, Integer>();
+    private static final Map<Integer, Integer> _mapTYPE_MSSQL_TO_JAVA = new HashMap<>();
+    private static final Map<Integer, Integer> _mapTYPE_TO_ISO = new HashMap<>();
   static
   {
     _mapTYPE_MSSQL_TO_JAVA.put(MsSqlType.IMAGE.getSystemTypeId(), Types.BLOB);
@@ -102,7 +102,6 @@ public class MsSqlDatabaseMetaData
 
         public MetaSpecificName(ResultSet rsWrapped, MsSqlConnection conn,
                                 int iProcedureName, int iSpecificName)
-      throws SQLException
     {
             super(rsWrapped, conn);
             _iSpecificName = iSpecificName;
@@ -120,17 +119,17 @@ public class MsSqlDatabaseMetaData
         @Override
     public String getString(String columnLabel) throws SQLException
     {
-            String sResult = null;
+        String sResult;
       if (columnLabel.equals(sSPECIFIC_NAME))
       {
-                /***
+          /**
                  ResultSetMetaData rsmd = getMetaData();
                  for (int i = 1; i <= rsmd.getColumnCount(); i++)
                  {
                  System.out.println(String.valueOf(i)+" "+rsmd.getColumnName(i)+
                  ": "+getString(rsmd.getColumnLabel(i)));
                  }
-                 ***/
+           */
                 sResult = getString(_iSpecificName);
       }
       else
@@ -223,17 +222,17 @@ public class MsSqlDatabaseMetaData
   {
         StringBuilder sbCaseDataType = new StringBuilder("case t.system_type_id\r\n");
         sbCaseDataType.append("when ");
-        sbCaseDataType.append(String.valueOf(MsSqlType.CLRUDT.getSystemTypeId()));
+      sbCaseDataType.append(MsSqlType.CLRUDT.getSystemTypeId());
         sbCaseDataType.append(" then ");
-        sbCaseDataType.append(String.valueOf(Types.JAVA_OBJECT)); // using "JAVA_OBJECT" for "CLR UDT"
+      sbCaseDataType.append(Types.JAVA_OBJECT); // using "JAVA_OBJECT" for "CLR UDT"
         sbCaseDataType.append("\r\n");
         sbCaseDataType.append("when ");
-        sbCaseDataType.append(String.valueOf(MsSqlType.TABLEUDT.getSystemTypeId()));
+      sbCaseDataType.append(MsSqlType.TABLEUDT.getSystemTypeId());
         sbCaseDataType.append(" then ");
-        sbCaseDataType.append(String.valueOf(Types.STRUCT));
+      sbCaseDataType.append(Types.STRUCT);
         sbCaseDataType.append("\r\n");
         sbCaseDataType.append("else ");
-        sbCaseDataType.append(String.valueOf(Types.DISTINCT));
+      sbCaseDataType.append(Types.DISTINCT);
         sbCaseDataType.append("\r\nend");
 
         // Type name may be "fully qualified". In that case it cannot be "as it is stored in the database"!
@@ -247,8 +246,8 @@ public class MsSqlDatabaseMetaData
                 schemaPattern = qi.getSchema();
                 catalog = qi.getCatalog();
             }
-        }
-    catch(ParseException pe) { }
+        } catch (ParseException ignored) {
+    }
         StringBuilder sbCondition = new StringBuilder("t.system_type_id <> t.user_type_id\r\n");
         if (catalog != null)
             sbCondition.append("AND DB_NAME() = " + SqlLiterals.formatStringLiteral(catalog) + "\r\n");
@@ -263,10 +262,10 @@ public class MsSqlDatabaseMetaData
       {
                 if (i > 0)
                     sbTypesSet.append(", ");
-                sbTypesSet.append(String.valueOf(types[i]));
+          sbTypesSet.append(types[i]);
             }
             if (sbTypesSet.length() > 0)
-                sbCondition.append("AND " + sbCaseDataType.toString() + " IN (" + sbTypesSet.toString() + ")\r\n");
+                sbCondition.append("AND " + sbCaseDataType + " IN (" + sbTypesSet + ")\r\n");
         }
 
         StringBuilder sbCaseBaseType = new StringBuilder("case t.system_type_id\r\n");
@@ -279,7 +278,7 @@ public class MsSqlDatabaseMetaData
                 if (i > 0)
                     sbCaseBaseType.append("\r\n");
                 sbCaseBaseType.append("when ");
-                sbCaseBaseType.append(String.valueOf(mst.getSystemTypeId()));
+          sbCaseBaseType.append(mst.getSystemTypeId());
                 sbCaseBaseType.append(" then ");
                 sbCaseBaseType.append(_mapTYPE_TO_ISO.get(iType).toString());
             }
@@ -292,9 +291,9 @@ public class MsSqlDatabaseMetaData
                 "s.name AS TYPE_SCHEM,\r\n" +
                 "t.name AS TYPE_NAME,\r\n" +
                 "at.assembly_qualified_name AS CLASSNAME,\r\n" + // is really the CLR class ...
-                sbCaseDataType.toString() + " AS DATA_TYPE,\r\n" +
+                sbCaseDataType + " AS DATA_TYPE,\r\n" +
                 "NULL AS REMARKS,\r\n" +
-                sbCaseBaseType.toString() + " AS BASE_TYPE\r\n" +
+                sbCaseBaseType + " AS BASE_TYPE\r\n" +
                 "from\r\n" +
                 "sys.schemas s\r\n" +
                 "  INNER JOIN\r\n" +
@@ -304,7 +303,7 @@ public class MsSqlDatabaseMetaData
                 " ON t.user_type_id = at.user_type_id\r\n" +
                 ")\r\n" +
                 "ON s.schema_id = t.schema_id\r\n" +
-                "WHERE " + sbCondition.toString() +
+                "WHERE " + sbCondition +
                 "ORDER BY DATA_TYPE, TYPE_CAT, TYPE_SCHEM, TYPE_NAME";
         Statement stmt = getConnection().createStatement();
         return stmt.unwrap(Statement.class).executeQuery(sSql);
@@ -363,25 +362,25 @@ public class MsSqlDatabaseMetaData
                 "  KCUFK.COLUMN_NAME AS FKCOLUMN_NAME,\r\n" +
                 "  KCUFK.ORDINAL_POSITION AS KEY_SEQ,\r\n" +
                 "  CASE RC.UPDATE_RULE\r\n" +
-                "    WHEN 'NO ACTION' THEN " + String.valueOf(DatabaseMetaData.importedKeyNoAction) + "\r\n" +
-                "    WHEN 'CASCADE' THEN " + String.valueOf(DatabaseMetaData.importedKeyCascade) + "\r\n" +
-                "    WHEN 'SET NULL' THEN " + String.valueOf(DatabaseMetaData.importedKeySetNull) + "\r\n" +
-                "    WHEN 'SET DEFAULT' THEN " + String.valueOf(DatabaseMetaData.importedKeySetDefault) + "\r\n" +
-                "    WHEN 'RESTRICT' THEN " + String.valueOf(DatabaseMetaData.importedKeyRestrict) + "\r\n" +
+                "    WHEN 'NO ACTION' THEN " + DatabaseMetaData.importedKeyNoAction + "\r\n" +
+                "    WHEN 'CASCADE' THEN " + DatabaseMetaData.importedKeyCascade + "\r\n" +
+                "    WHEN 'SET NULL' THEN " + DatabaseMetaData.importedKeySetNull + "\r\n" +
+                "    WHEN 'SET DEFAULT' THEN " + DatabaseMetaData.importedKeySetDefault + "\r\n" +
+                "    WHEN 'RESTRICT' THEN " + DatabaseMetaData.importedKeyRestrict + "\r\n" +
                 "  END AS UPDATE_RULE,\r\n" +
                 "  CASE RC.DELETE_RULE\r\n" +
-                "    WHEN 'NO ACTION' THEN " + String.valueOf(DatabaseMetaData.importedKeyNoAction) + "\r\n" +
-                "    WHEN 'CASCADE' THEN " + String.valueOf(DatabaseMetaData.importedKeyCascade) + "\r\n" +
-                "    WHEN 'SET NULL' THEN " + String.valueOf(DatabaseMetaData.importedKeySetNull) + "\r\n" +
-                "    WHEN 'SET DEFAULT' THEN " + String.valueOf(DatabaseMetaData.importedKeySetDefault) + "\r\n" +
-                "    WHEN 'RESTRICT' THEN " + String.valueOf(DatabaseMetaData.importedKeyRestrict) + "\r\n" +
+                "    WHEN 'NO ACTION' THEN " + DatabaseMetaData.importedKeyNoAction + "\r\n" +
+                "    WHEN 'CASCADE' THEN " + DatabaseMetaData.importedKeyCascade + "\r\n" +
+                "    WHEN 'SET NULL' THEN " + DatabaseMetaData.importedKeySetNull + "\r\n" +
+                "    WHEN 'SET DEFAULT' THEN " + DatabaseMetaData.importedKeySetDefault + "\r\n" +
+                "    WHEN 'RESTRICT' THEN " + DatabaseMetaData.importedKeyRestrict + "\r\n" +
                 "  END AS DELETE_RULE,\r\n" +
                 "  TCFK.CONSTRAINT_NAME AS FK_NAME,\r\n" +
                 "  TCPK.CONSTRAINT_NAME AS PK_NAME,\r\n" +
                 "  CASE\r\n" +
-                "    WHEN TCFK.IS_DEFERRABLE = 'NO' THEN " + String.valueOf(DatabaseMetaData.importedKeyNotDeferrable) + "\r\n" +
-      "    WHEN TCFK.IS_DEFERRABLE = 'YES' AND TCFK.INITIALLY_DEFERRED = 'YES' THEN "+String.valueOf(DatabaseMetaData.importedKeyInitiallyDeferred)+"\r\n"+
-                "    ELSE " + String.valueOf(DatabaseMetaData.importedKeyInitiallyImmediate) + "\r\n" +
+                "    WHEN TCFK.IS_DEFERRABLE = 'NO' THEN " + DatabaseMetaData.importedKeyNotDeferrable + "\r\n" +
+                "    WHEN TCFK.IS_DEFERRABLE = 'YES' AND TCFK.INITIALLY_DEFERRED = 'YES' THEN " + DatabaseMetaData.importedKeyInitiallyDeferred + "\r\n" +
+                "    ELSE " + DatabaseMetaData.importedKeyInitiallyImmediate + "\r\n" +
                 "  END AS DEFERRABILITY\r\n" +
                 "FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC\r\n" +
                 "  INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS TCFK\r\n" +
