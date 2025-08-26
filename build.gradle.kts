@@ -7,12 +7,16 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 group = "ch.admin.bar"
 version = scmVersion.version
+val versions = mapOf(
+    "jdbc-base" to "v2.2.11",
+)
 
 repositories {
     mavenCentral()
@@ -24,13 +28,19 @@ repositories {
 dependencies {
     implementation(fileTree("lib") { include("*.jar") })
 
+    implementation("org.antlr:antlr4-runtime:4.5.2")
+    implementation("ch.admin.bar:enterutilities:v2.2.5")
+    implementation("ch.admin.bar:SqlParser:v2.2.4")
+    implementation("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}")
+
+    //test dependencies
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation("org.junit.vintage:junit-vintage-engine")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.testcontainers:testcontainers:1.19.0")
     testImplementation("org.testcontainers:mssqlserver:1.19.0")
-
-    //necessary for useJUnitPlatform()
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
+    testImplementation("org.hamcrest:hamcrest-core:1.3")
+    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
